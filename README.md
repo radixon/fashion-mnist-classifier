@@ -29,3 +29,23 @@ An end-to-end deep learning pipeline for classifying Fashion MNIST images.
 git clone https://github.com/radixon/fashion-mnist-classifier.git
 cd fashion-mnist-classifier
 ```
+
+### 2. [Optional] Create and Activate a Virtual Environment
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 3. Install Requirements
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Run Training Script
+```bash
+python3 scripts/train.py
+```
+
+## Notes
+
+* The script includes logic to detect CUDA if available
