@@ -58,12 +58,14 @@ def dataloaders(train_dataset: Dataset, test_dataset: Dataset, batch_size: int, 
     Returns:
         Tuple[DataLoader, DataLoader]:  A tuple containing train/test dataloaders
     """
-
+    train_loader, test_loader = None, None
     # DataLoader:  train set
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, pin_memory=pin_memory)
+    if train_dataset:
+        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, pin_memory=pin_memory)
 
     # DataLoader:  test set
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers, pin_memory=pin_memory)
+    if test_dataset:
+        test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers, pin_memory=pin_memory)
 
     print(f"DataLoaders created with batch size: {batch_size}")
     return train_loader, test_loader

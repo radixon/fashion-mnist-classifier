@@ -1,8 +1,9 @@
+matplotlib
 numpy
 pandas
-matplotlib
-scikit-learn
 pyyaml
+scikit-learn
+seaborn
 torch
 torchvision
 tqdm

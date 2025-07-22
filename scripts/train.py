@@ -77,8 +77,9 @@ def main():
     print("\n===== Training Complete =====")
 
     # Save training model state dictionary
-    torch.save(model.state_dict(), 'vanilla_cnn_model.pth')
-    print("Model Saved")
+    model_save_path = 'vanilla_cnn_model.pth'
+    torch.save(model.state_dict(), model_save_path)
+    print(f"Model state dictionary saved to: {model_save_path}")
 
 
 if __name__ == "__main__":
