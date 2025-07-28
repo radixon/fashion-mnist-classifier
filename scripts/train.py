@@ -15,15 +15,8 @@ from data.data_loader import load_datasets, dataloaders
 from data.preprocessing import get_transforms
 from models.cnn_models import VanillaCNN
 from training.trainer import ModelTrainer
+from utils.config import load_config
 
-
-# Constants (to be in config.yaml)
-RAW_DATA_PATH = 'data/raw'
-BATCH_SIZE = 64             # Samples per batch
-LEARNING_RATE = 0.001
-EPOCHS = 10                 
-NUM_CLASSES = 10
-INPUT_DIM = (1, 28, 28)
 
 def main():
     """
@@ -31,33 +24,55 @@ def main():
     """
     print("----- Fashion MNIST Training Script -----")
 
+    # Load Configuration Files
+    config = load_config()
+    data_config = config['data']
+    training_config = config['training']
+    model_config = config['model']
+    paths_config = config['paths']
+
     # Device Configuration
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() and training_config['device'] == "cuda" else "cpu")
     print(f" Using Device: {device}")
 
     # Data Loading and Preprocessing
     # Default transforms
+    print("\nLoading datasets and creating DataLoaders...")
     transform = get_transforms()
 
     # Load datasets and apply transforms
-    train_dataset, test_dataset = load_datasets(raw_data_path=RAW_DATA_PATH, transforms=transform)
+    train_dataset, test_dataset = load_datasets(raw_data_path=data_config['raw_data_path'], transforms=transform)
 
     # Create DataLoaders
-    train_loader, test_loader = dataloaders(train_dataset, test_dataset, BATCH_SIZE)
+    train_loader, test_loader = dataloaders(train_dataset, test_dataset, batch_size=training_config['batch_size'], 
+                                            num_workers=training_config['num_workers'], pin_memory=training_config['pin_memory'])
 
     # Model Initialization
-    print("Initializing VanillaCNN model...")
-
+    print("\nInitializing model...")
+    model_name = model_config['name']
+    
     # Create an instance of VanillaCNN
-    model = VanillaCNN(input_dim=INPUT_DIM, num_classes=NUM_CLASSES)
+    model = None
+    if model_name == "VanillaCNN":
+        model = VanillaCNN(input_dim=tuple(data_config['input_shape']), num_classes=data_config['num_classes'])
+    else:
+        raise ValueError(f"Unknown Model Name: {model_name}")
     print(model) # Model Architecture
-
+    
     # Loss Function and Optimizer
     # CrossEntropyLoss is used for multi-class classification
-    criterion = nn.CrossEntropyLoss()
+    if training_config['loss_function'] == "CrossEntropyLoss":
+        criterion = nn.CrossEntropyLoss()
+    else:
+        raise ValueError(f"Unknown loss function: {training_config['loss_function']}")
 
     # Adam optimizer
-    optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
+    if training_config['optimizer'] == "Adam":
+        optimizer = optim.Adam(model.parameters(), lr=training_config['learning_rate'])
+    elif training_config['optimizer'] == "SGD":
+        optimizer = optim.SGD(model.parameters(), lr=training_config['learning_rate'])
+    else:
+        raise ValueError(f"Unknown optimizer: {training_config['optimizer']}")
 
     # Model Trainer
     print("Begin training...")
@@ -66,7 +81,7 @@ def main():
     trainer = ModelTrainer(model, device)
 
     # Training Loop
-    for epoch in range(1, EPOCHS + 1):
+    for epoch in range(1, training_config['epochs'] + 1):
         # Train for one epoch
         train_loss, train_accuracy = trainer.train_mode(train_loader, optimizer, criterion)
         print(f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_accuracy:.4f}")
@@ -77,9 +92,12 @@ def main():
     print("\n===== Training Complete =====")
 
     # Save training model state dictionary
-    model_save_path = 'vanilla_cnn_model.pth'
-    torch.save(model.state_dict(), model_save_path)
-    print(f"Model state dictionary saved to: {model_save_path}")
+    model_save_path = paths_config['model_save_dir']
+    temp_model_file = paths_config['temp_model_file']
+    os.makedirs(model_save_path, exist_ok=True)
+    full_model_save_path = os.path.join(model_save_path, temp_model_file)
+    torch.save(model.state_dict(), full_model_save_path)
+    print(f"Model state dictionary saved to: {full_model_save_path}")
 
 
 if __name__ == "__main__":
