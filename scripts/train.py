@@ -3,6 +3,7 @@ import sys
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import logging
 
 # Add the src directory of the project
 # script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -16,7 +17,10 @@ from data.preprocessing import get_transforms
 from models.cnn_models import VanillaCNN
 from training.trainer import ModelTrainer
 from utils.config import load_config
+from utils.logger import setup_logging
+from utils.helpers import get_timestamp_str
 
+logger = logging.getLogger(__name__)
 
 def main():
     """
@@ -31,13 +35,19 @@ def main():
     model_config = config['model']
     paths_config = config['paths']
 
+    # Setup Logging
+    timestamp = get_timestamp_str()
+    log_filename = paths_config['train_log_filename'].format(timestamp=timestamp)
+    setup_logging(paths_config['logs_dir'], log_filename)
+    logger.info("----- Fashion MNIST Training Script (Logging Enabled) -----")
+
     # Device Configuration
     device = torch.device("cuda" if torch.cuda.is_available() and training_config['device'] == "cuda" else "cpu")
-    print(f" Using Device: {device}")
+    logger.info(f" Using Device: {device}")
 
     # Data Loading and Preprocessing
     # Default transforms
-    print("\nLoading datasets and creating DataLoaders...")
+    logger.info("\nLoading datasets and creating DataLoaders...")
     transform = get_transforms()
 
     # Load datasets and apply transforms
@@ -48,7 +58,7 @@ def main():
                                             num_workers=training_config['num_workers'], pin_memory=training_config['pin_memory'])
 
     # Model Initialization
-    print("\nInitializing model...")
+    logger.info("\nInitializing model...")
     model_name = model_config['name']
     
     # Create an instance of VanillaCNN
@@ -56,15 +66,18 @@ def main():
     if model_name == "VanillaCNN":
         model = VanillaCNN(input_dim=tuple(data_config['input_shape']), num_classes=data_config['num_classes'])
     else:
-        raise ValueError(f"Unknown Model Name: {model_name}")
-    print(model) # Model Architecture
+        logger.error(f"Unknown Model Name: {model_name}")
+        sys.exit(1)
+    logger.info(f"Model Architecture: \n{model}") # Model Architecture
     
     # Loss Function and Optimizer
     # CrossEntropyLoss is used for multi-class classification
+    logger.info("\nSettig up loss function and optimizer")
     if training_config['loss_function'] == "CrossEntropyLoss":
         criterion = nn.CrossEntropyLoss()
     else:
-        raise ValueError(f"Unknown loss function: {training_config['loss_function']}")
+        logger.error(f"Unknown loss function: {training_config['loss_function']}")
+        sys.exit(1)
 
     # Adam optimizer
     if training_config['optimizer'] == "Adam":
@@ -72,10 +85,11 @@ def main():
     elif training_config['optimizer'] == "SGD":
         optimizer = optim.SGD(model.parameters(), lr=training_config['learning_rate'])
     else:
-        raise ValueError(f"Unknown optimizer: {training_config['optimizer']}")
+        logger.error(f"Unknown optimizer: {training_config['optimizer']}")
+        sys.exit(1)
 
     # Model Trainer
-    print("Begin training...")
+    logger.info("===== Begin Training =====")
 
     # Create an instance of the ModelTrainer
     trainer = ModelTrainer(model, device)
@@ -83,13 +97,14 @@ def main():
     # Training Loop
     for epoch in range(1, training_config['epochs'] + 1):
         # Train for one epoch
+        logger.info(f"\nEpoch {epoch} of {training_config['epochs']}")
         train_loss, train_accuracy = trainer.train_mode(train_loader, optimizer, criterion)
-        print(f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_accuracy:.4f}")
+        logger.info(f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_accuracy:.4f}")
 
         # Minimum Viable Product validation using test_loader
         val_loss, val_accuracy = trainer.validate_mode(test_loader, criterion)
-        print(f"Validation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.4f}")
-    print("\n===== Training Complete =====")
+        logger.info(f"Validation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.4f}")
+    logger.info("\n===== Training Complete =====")
 
     # Save training model state dictionary
     model_save_path = paths_config['model_save_dir']
@@ -97,7 +112,7 @@ def main():
     os.makedirs(model_save_path, exist_ok=True)
     full_model_save_path = os.path.join(model_save_path, temp_model_file)
     torch.save(model.state_dict(), full_model_save_path)
-    print(f"Model state dictionary saved to: {full_model_save_path}")
+    logger.info(f"Model state dictionary saved to: {full_model_save_path}")
 
 
 if __name__ == "__main__":
