@@ -42,7 +42,7 @@ def load_datasets(raw_data_path: str = 'data/raw', transforms: Callable=None, do
 
 
 
-def dataloaders(train_dataset: Dataset, test_dataset: Dataset, batch_size: int, num_workers: int=0, pin_memory: bool=True):
+def get_dataloaders(train_dataset: Dataset, test_dataset: Dataset, batch_size: int, num_workers: int=0, pin_memory: bool=True):
     """
     Create DataLoaders for given datasets.  DataLoaders are responsible for iterating over the dataset
 

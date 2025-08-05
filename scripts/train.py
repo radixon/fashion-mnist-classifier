@@ -12,7 +12,7 @@ import logging
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 # Import modules from src directory
-from data.data_loader import load_datasets, dataloaders
+from data.data_loader import load_datasets, get_dataloaders
 from data.preprocessing import get_transforms
 from models.cnn_models import VanillaCNN
 from training.trainer import ModelTrainer
@@ -54,7 +54,7 @@ def main():
     train_dataset, test_dataset = load_datasets(raw_data_path=data_config['raw_data_path'], transforms=transform)
 
     # Create DataLoaders
-    train_loader, test_loader = dataloaders(train_dataset, test_dataset, batch_size=training_config['batch_size'], 
+    train_loader, test_loader = get_dataloaders(train_dataset, test_dataset, batch_size=training_config['batch_size'], 
                                             num_workers=training_config['num_workers'], pin_memory=training_config['pin_memory'])
 
     # Model Initialization

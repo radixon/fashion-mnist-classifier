@@ -7,7 +7,7 @@ from datetime import datetime
 import logging
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-from data.data_loader import load_datasets, dataloaders
+from data.data_loader import load_datasets, get_dataloaders
 from data.preprocessing import get_transforms
 from models.cnn_models import VanillaCNN
 from evaluation.evaluator import ModelEvaluator, save_metrics
@@ -41,7 +41,7 @@ def main():
     logger.info("\nLoading Test Dataset")
     transform = get_transforms(train=False) # Use Validation Transforms
     _, test_dataset = load_datasets(raw_data_path=data_config['raw_data_path'], transforms=transform)
-    _, test_loader = dataloaders(train_dataset=None, test_dataset=test_dataset, batch_size=training_config['batch_size'], 
+    _, test_loader = get_dataloaders(train_dataset=None, test_dataset=test_dataset, batch_size=training_config['batch_size'], 
                                  num_workers=training_config['num_workers'], pin_memory=training_config['pin_memory'])  
 
     # Model Loading
