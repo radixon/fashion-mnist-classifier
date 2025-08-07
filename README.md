@@ -46,25 +46,25 @@ pip install -r requirements.txt
 Explore the dataset, train, and evaluate the model using the configured scripts and notebooks:
 
 ### 1. Exploratory Data Analysis
-    * Start JupyterLab from project root:
+* Start JupyterLab from project root:
 ```bash
 jupyter lab
 ```
-    * Open 'notebooks/01_data_exploration.ipynb'.
-    * Run cells to visualize sample images, analyze class distributions, and save sample image plots and class distribution charts.
+* Open 'notebooks/01_data_exploration.ipynb'.
+* Run cells to visualize sample images, analyze class distributions, and save sample image plots and class distribution charts.
 
 ### 2. Train the Model
 ```bash
 python3 scripts/train.py
 ```
-    * Loads configuration, train VanillaCNN model, and save state dictionary.
+* Loads configuration, train VanillaCNN model, and save state dictionary.
 
 ### 3. Evaluate the Trained Model
 ```bash
 python3 scripts/evaluate.py
 ```
-    *  Load the saved model, evaluate the model on the test set, save detailed metrics, and generate a confusion matrix.
-    * Log file for the evaluation created and saved in 'relusts/logs/'.
+*  Load the saved model, evaluate the model on the test set, save detailed metrics, and generate a confusion matrix.
+* Log file for the evaluation created and saved in 'relusts/logs/'.
 
 ## License
 This project is licensed under the [MIT License](LICENSE).

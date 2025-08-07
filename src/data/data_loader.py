@@ -3,7 +3,7 @@ from torchvision import datasets                    # Required to load FashionMN
 from torch.utils.data import DataLoader, Dataset    # For creating data pipeline
 import os
 from typing import Tuple, Callable
-from data.preprocessing import get_transforms   # Import project defined preprocessing functions
+from .preprocessing import get_transforms   # Import project defined preprocessing functions
 
 def load_datasets(raw_data_path: str = 'data/raw', transforms: Callable=None, download: bool=True) -> Tuple[Dataset, Dataset]:
     """
