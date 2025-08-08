@@ -52,7 +52,7 @@ def plot_training_history(history: Dict[str, List[float]], save_path: str, title
     if 'val_loss' in history:
         plt.plot(history['val_loss'], label='Validation Loss')
     plt.title('Loss')
-    plt.xlable('Epoch')
+    plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.legend()
     plt.grid(True)

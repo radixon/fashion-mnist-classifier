@@ -36,3 +36,6 @@ checkpoints/
 
 # Test Scripts
 temp_data_test.py
+
+# MLflow tracking
+mlruns/
