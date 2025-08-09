@@ -56,11 +56,11 @@ graph TD
     H -- View --> I[MLflow UI]
     D -- Log --> H
     F -- Log --> H
-    Style A fill:#f9f,stroke:#333,stroke-width:2px;
-    Style C fill:#f9f,stroke:#333,stroke-width:2px;
-    Style E fill:#f9f,stroke:#333,stroke-width:2px;
-    Style G fill:#f9f,stroke:#333,stroke-width:2px;
-    Style I fill:#f9f,stroke:#333,stroke-width:2px;
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style C fill:#f9f,stroke:#333,stroke-width:2px
+    style E fill:#f9f,stroke:#333,stroke-width:2px
+    style G fill:#f9f,stroke:#333,stroke-width:2px
+    style I fill:#f9f,stroke:#333,stroke-width:2px
 ```
 
 
