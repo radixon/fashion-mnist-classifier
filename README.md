@@ -54,8 +54,12 @@ graph TD
     F --> G[Metrics & Plots]
     G --> H[MLflow Tracking]
     H -- View --> I[MLflow UI]
+
+    %% Logging Connections
     D -- Log --> H
     F -- Log --> H
+    
+    %% Highlight Key Stages
     style A fill:#f9f,stroke:#333,stroke-width:2px
     style C fill:#f9f,stroke:#333,stroke-width:2px
     style E fill:#f9f,stroke:#333,stroke-width:2px
