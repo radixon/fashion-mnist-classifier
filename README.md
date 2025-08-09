@@ -46,18 +46,18 @@ The project follows a modular and layered architecture:
 
 ```mermaid
 graph TD
-    A[Raw Data] --> B(Data Loading & Preprocessing)
+    A[Raw Data] --> B[Data Loading & Preprocessing]
     B --> C[Processed Data (Batches)]
-    C -- Train --> D(Model Training)
-    D -- Trained Model --> E[Saved Model Checkpoint]
-    E -- Load --> F(Model Evaluation)
+    C --> D[Model Training]
+    D --> E[Saved Model Checkpoint]
+    E --> F[Model Evaluation]
     F --> G[Metrics & Plots]
     G --> H[MLflow Tracking]
-    H -- View --> I[MLflow UI]
+    H --> I[MLflow UI]
 
     %% Logging Connections
-    D -- Log --> H
-    F -- Log --> H
+    D -.-> H
+    F -.-> H
     
     %% Highlight Key Stages
     style A fill:#f9f,stroke:#333,stroke-width:2px
