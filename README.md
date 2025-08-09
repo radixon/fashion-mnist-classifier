@@ -1,27 +1,81 @@
-# Fashion MNIST Classifier
+# Fashion MNIST Classifier: End-to-End Deep Learning Pipeline with MLOps
 
-An end-to-end deep learning pipeline for classifying Fashion MNIST images.
-<br/>
-<br/>
 
-## Project Features
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-* Convolutional Neural Networks
-* Config-driven training via YAML
-* Modular codebase
-* Clean documentation
-<br/>
-<br/>
+## Project Description
 
-## Tech Stack
+This project delivers a **comprehensive, end-to-end deep learning solution** for classifying images from the Fashion MNIST dataset. Designed with **PyTorch**, the project showcases a full machine learning lifecycle, from structured data management and model experimentation to evaluation and **integrated experiment tracking with MLflow**. The project emphasizes **MLOps** principles and best practices in software engineering.
 
-* Python 3.8+
-* PyTorch
-* NumPy, pandas, scikit-learn
-* Matplotlib, seaborn
-* PyYAML
+## Table of Contents
 
-## Getting Started
+1.  [Features](#features)
+2.  [Key Results](#key-results)
+3.  [Architecture Overview](#architecture-overview)
+4.  [Dataset](#dataset)
+5.  [Technologies](#technologies)
+6.  [Installation](#installation)
+7.  [Usage](#usage)
+8.  [Project Structure](#project-structure)
+9.  [MLOps & Experiment Tracking](#mlops--experiment-tracking)
+10. [License](#license)
+
+## Features
+
+*   **Advanced Deep Learning Models:** Implements and experiments with various Convolutional Neural Network (CNN) architectures, including a `VanillaCNN` for baseline and a `DeepCNN` incorporating Batch Normalization and Dropout for improved performance and regularization.
+*   **Efficient PyTorch Data Pipeline:** Leverages `torchvision.datasets` and `torch.utils.data.DataLoader` for streamlined data acquisition, preprocessing (normalization, tensor conversion), batching, and shuffling.
+*   **Configurable Training & Evaluation:** Utilizes a centralized `config.yaml` for managing all hyperparameters, model architectures, and file paths, ensuring high reproducibility and easy experimentation.
+*   **Robust Training Management:** Encapsulates the core PyTorch training and validation loops (`ModelTrainer`), handling crucial model state changes (`model.train()`, `model.eval()`).
+*   **Comprehensive Evaluation & Visualization:** Provides tools for calculating key performance metrics (accuracy, precision, recall, F1-score) and generates insightful plots (confusion matrices, training history, sample predictions).
+*   **Structured Logging:** Implements a sophisticated logging system that directs messages to both the console and timestamped log files, crucial for debugging, monitoring, and auditing training runs.
+*   **Experiment Tracking with MLflow:** Fully integrates MLflow to automatically log parameters, epoch-wise metrics, and model artifacts for systematic experiment comparison and management.
+*   **Exploratory Data Analysis (EDA):** Dedicated Jupyter Notebook for in-depth data understanding, visualization of sample images, and analysis of class distributions.
+*   **Rapid Experimentation:** Jupyter Notebook for quick training runs and interactive analysis of baseline model performance.
+*   **Modular Project Structure:** Organized into logical directories and Python packages (`src/`, `data/`, `configs/`, `scripts/`, `models/`, `results/`, `notebooks/`) for clear separation of concerns.
+*   **Version Control:** Managed with Git and includes a `.gitignore` for a clean repository.
+
+## Key Results
+
+*   **Model Performance:** The `DeepCNN` model, leveraging Batch Normalization and Dropout, consistently achieves higher validation accuracy **~93%** after 10 epochs compared to the `VanillaCNN` **~91%**.
+*   **Experiment Tracking:** Over **[Number of runs you have logged, e.g., 5-10]** unique experiment runs have been logged and can be compared using the MLflow UI, demonstrating efficient hyperparameter tuning and model selection.
+*   **Reproducibility:** All training runs are fully reproducible, with parameters, metrics, and models versioned in MLflow.
+
+## Architecture Overview
+
+The project follows a modular and layered architecture:
+
+```mermaid
+graph TD
+    A[Raw Data] --> B(Data Loading & Preprocessing)
+    B --> C[Processed Data (Batches)]
+    C -- Train --> D(Model Training)
+    D -- Trained Model --> E[Saved Model Checkpoint]
+    E -- Load --> F(Model Evaluation)
+    F --> G[Metrics & Plots]
+    G --> H[MLflow Tracking]
+    H -- View --> I[MLflow UI]
+    D -- Log --> H
+    F -- Log --> H
+    Style A fill:#f9f,stroke:#333,stroke-width:2px;
+    Style C fill:#f9f,stroke:#333,stroke-width:2px;
+    Style E fill:#f9f,stroke:#333,stroke-width:2px;
+    Style G fill:#f9f,stroke:#333,stroke-width:2px;
+    Style I fill:#f9f,stroke:#333,stroke-width:2px;
+```
+
+
+## Dataset
+
+The project uses the Fashion MNIST dataset.  The dataset consists of 70,000 grayscale images categorized into 10 classes of fashion articles.
+
+## Technologies
+
+* Language: Python
+* Deep Learning: PyTorch, torchvision
+* Data & ML Libraries: NumPy, pandas, matplotlib, seaborn, tqdm, scikit-learn
+* MLOps & Tools: MLflow, YAML, Git, logging
+
+## Installation
 
 ### 1. Clone Repo
 
@@ -45,26 +99,86 @@ pip install -r requirements.txt
 ## Usage
 Explore the dataset, train, and evaluate the model using the configured scripts and notebooks:
 
-### 1. Exploratory Data Analysis
-* Start JupyterLab from project root:
-```bash
-jupyter lab
-```
-* Open 'notebooks/01_data_exploration.ipynb'.
-* Run cells to visualize sample images, analyze class distributions, and save sample image plots and class distribution charts.
-
-### 2. Train the Model
+- Train Model
 ```bash
 python3 scripts/train.py
 ```
-* Loads configuration, train VanillaCNN model, and save state dictionary.
 
-### 3. Evaluate the Trained Model
+- Evaluate Model
 ```bash
 python3 scripts/evaluate.py
 ```
-*  Load the saved model, evaluate the model on the test set, save detailed metrics, and generate a confusion matrix.
-* Log file for the evaluation created and saved in 'relusts/logs/'.
+
+### Jupyter Lab
+- JupyterLab
+```bash
+jupyter lab
+```
+- 'notebooks/01_data_exploration.ipynb': Exploratory Data Analysis Notebook
+- 'notebooks/02_baseline_models.ipynb': Baseline Model Experimentation Notebook
+
+### MLflow UI
+```bash
+mlflow ui
+```
+- Navigate to the address displayed in terminal (http://<localhost>:5000)
+
+## Project Structure
+fashion-mnist-classifier/
+├── .git/                     # Git version control metadata
+├── .venv/                    # Python virtual environment
+├── configs/                  # Configuration files for the project
+│   └── config.yaml           # Main configuration for data, training, model, and paths
+├── data/                     # Stores all project data
+│   ├── raw/                  # Original, raw dataset files (downloaded by torchvision)
+│   │   └── FashionMNIST/     # (Contains the actual .gz data files)
+│   │       └── raw/
+│   │       └── processed/    # (Used by torchvision for some datasets, but empty for F-MNIST)
+│   ├── processed/            # For cleaned/transformed data (currently empty)
+│   └── external/             # For external/supplementary data (currently empty)
+├── mlruns/                   # MLflow tracking data (ignored by Git)
+├── notebooks/                # Jupyter Notebooks for exploration and experimentation
+│   ├── 01_data_exploration.ipynb # In-depth EDA of the Fashion MNIST dataset
+│   └── 02_baseline_models.ipynb  # Rapid experimentation with baseline models
+├── scripts/                  # Executable Python scripts for various tasks
+│   ├── train.py              # Main script to train the model
+│   └── evaluate.py           # Script to evaluate a trained model
+├── src/                      # Source code for the project
+│   ├── __init__.py           # Marks 'src' as a Python package
+│   ├── data/                 # Data loading and preprocessing modules
+│   │   ├── __init__.py       # Marks 'src/data' as a Python sub-package
+│   │   ├── data_loader.py    # Functions to load datasets and create DataLoaders
+│   │   └── preprocessing.py  # Defines image transformations (ToTensor, Normalize)
+│   ├── evaluation/           # Modules for model evaluation and visualization
+│   │   ├── __init__.py       # Marks 'src/evaluation' as a Python sub-package
+│   │   ├── evaluator.py      # Core logic for calculating metrics
+│   │   └── visualization.py  # Functions for plotting results (e.g., confusion matrix)
+│   ├── model/                # Neural network model definitions
+│   │   ├── __init__.py       # Marks 'src/model' as a Python sub-package
+│   │   ├── base_model.py     # Abstract base class for all models
+│   │   └── cnn_models.py     # SimpleCNN and DeepCNN implementations
+│   ├── training/             # Modules for training logic
+│   │   ├── __init__.py       # Marks 'src/training' as a Python sub-package
+│   │   └── trainer.py        # Manages the training and validation loops
+│   │   └── callbacks.py      # (Placeholder, will be implemented soon)
+│   │   └── metrics.py        # (Placeholder, will be implemented soon)
+│   └── utils/                # General utility functions
+│       ├── __init__.py       # Marks 'src/utils' as a Python sub-package
+│       ├── config.py         # Handles loading configuration from YAML
+│       ├── helpers.py        # General helper functions (e.g., timestamp, class names)
+│       └── logger.py         # Centralized logging setup
+├── .gitignore                # Specifies files/folders to be ignored by Git
+├── LICENSE                   # Project's license (e.g., MIT)
+├── README.md                 # Project overview and documentation
+├── requirements.txt          # Python dependencies
+└── setup.py                  # Project packaging configuration
+
+
+## MLOps & Experiment Tracking
+
+- Configuration Management: All parameters are in config.yaml for reproducibility
+- Structured Logging: logs generated to aid in debugging
+- Experiment Tracking: MLflow integrated to record and compare each experiment run
 
 ## License
 This project is licensed under the [MIT License](LICENSE).

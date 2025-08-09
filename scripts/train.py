@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 # Import modules from src directory
 from data.data_loader import load_datasets, get_dataloaders
 from data.preprocessing import get_transforms
-from models.cnn_models import VanillaCNN
+from models.cnn_models import VanillaCNN, DeepCNN
 from training.trainer import ModelTrainer
 from evaluation.evaluator import ModelEvaluator, save_metrics
 from evaluation.visualization import plot_confusion_matrix, plot_training_history
@@ -86,6 +86,8 @@ def main():
         model = None
         if model_name == "VanillaCNN":
             model = VanillaCNN(input_dim=tuple(data_config['input_shape']), num_classes=data_config['num_classes'])
+        elif model_name == "DeepCNN":
+            model = DeepCNN(input_dim=tuple(data_config['input_shape']), num_classes=data_config['num_classes'], **model_config['deep_cnn_params'])
         else:
             logger.error(f"Unknown Model Name: {model_name}")
             sys.exit(1)
