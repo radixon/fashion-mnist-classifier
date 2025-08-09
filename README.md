@@ -45,26 +45,26 @@ This project delivers a **comprehensive, end-to-end deep learning solution** for
 The project follows a modular and layered architecture:
 
 ```mermaid
-graph TD
-    A[Raw Data] --> B[Data Loading & Preprocessing]
-    B --> C[Processed Data (Batches)]
-    C --> D[Model Training]
-    D --> E[Saved Model Checkpoint]
-    E --> F[Model Evaluation]
-    F --> G[Metrics & Plots]
-    G --> H[MLflow Tracking]
-    H --> I[MLflow UI]
+graph TD;
+    A[Raw Data] --> B[Data Loading & Preprocessing];
+    B --> C[Processed Data (Batches)];
+    C --> D[Model Training];
+    D --> E[Saved Model Checkpoint];
+    E --> F[Model Evaluation];
+    F --> G[Metrics & Plots];
+    G --> H[MLflow Tracking];
+    H --> I[MLflow UI];
 
     %% Logging Connections
-    D -.-> H
-    F -.-> H
+    D -.-> H;
+    F -.-> H;
     
     %% Highlight Key Stages
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style C fill:#f9f,stroke:#333,stroke-width:2px
-    style E fill:#f9f,stroke:#333,stroke-width:2px
-    style G fill:#f9f,stroke:#333,stroke-width:2px
-    style I fill:#f9f,stroke:#333,stroke-width:2px
+    style A fill:#f9f,stroke:#333,stroke-width:2px;
+    style C fill:#f9f,stroke:#333,stroke-width:2px;
+    style E fill:#f9f,stroke:#333,stroke-width:2px;
+    style G fill:#f9f,stroke:#333,stroke-width:2px;
+    style I fill:#f9f,stroke:#333,stroke-width:2px;
 ```
 
 
