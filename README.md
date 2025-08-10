@@ -128,7 +128,7 @@ mlflow ui
 
 ## Project Structure
 ```
-fashion-mnist-classifier/ <br/>
+fashion-mnist-classifier/ 
 ├── .git/                     # Git version control metadata
 ├── .venv/                    # Python virtual environment
 ├── configs/                  # Configuration files for the project
@@ -136,7 +136,7 @@ fashion-mnist-classifier/ <br/>
 ├── data/                     # Stores all project data
 │   ├── raw/                  # Original, raw dataset files (downloaded by torchvision)
 │   │   └── FashionMNIST/     # (Contains the actual .gz data files)
-│   │       └── raw/<br/>
+│   │       └── raw/
 │   │       └── processed/    # (Used by torchvision for some datasets, but empty for F-MNIST)
 │   ├── processed/            # For cleaned/transformed data (currently empty)
 │   └── external/             # For external/supplementary data (currently empty)

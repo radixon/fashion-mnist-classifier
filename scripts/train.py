@@ -191,7 +191,8 @@ def main():
             logger.warning("Best Model Checkpoint not found. Using model from last epoch for evaluation.")
         
         # Log Model in MLflow
-        mlflow.pytorch.log_model(pytorch_model=model, artifact_path="model", registered_model_name=f"Model logged to MLflow as artifact path 'model'.")
+        mlflow.pytorch.log_model(pytorch_model=model, artifact_path="model", registered_model_name=f"{model_config['name']}_FashionMNIST")
+        logger.info(f"Model logged to MLflow as artifact path 'model'.")
 
         # Perform Evaluation and Log Results
         logger.info("\nPerforming evaluation and logging results")

@@ -61,10 +61,17 @@ class ModelEvaluator:
         """
         overall_accuracy = accuracy_score(true_labels, predicted_labels)
 
-        # classification_report returns a str
+        # Classification Report as a Dictionary
         report_dict = classification_report(true_labels, predicted_labels, target_names=class_names, output_dict=True)
+
+        # Classification Report as a string
+        report_str = classification_report(true_labels, predicted_labels, target_names=class_names, output_dict=False)
+
+        # Confusion Matrix
         confusion_matrix_ = confusion_matrix(true_labels, predicted_labels)
-        metrics = {"overall_accuracy": overall_accuracy, "classification_report": report_dict, "confusion_matrix": confusion_matrix_.tolist()}
+
+        # Store Metrics
+        metrics = {"overall_accuracy": overall_accuracy, "classification_report_dict": report_dict, "classification_report_str": report_str,"confusion_matrix": confusion_matrix_.tolist()}
 
         return metrics
 
@@ -78,8 +85,23 @@ def save_metrics(metrics: Dict[str, Any], save_path: str):
         save_path (str): Path to the JSON file
     """
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    metrics_to_save = metrics.copy()
+    if "classification_report_str" in metrics_to_save:
+        del metrics_to_save["classification_report_str"]
     with open(save_path, 'w') as f:
         json.dump(metrics, f, indent=4)
     print(f"Metrics saved to: {save_path}")
 
 
+def save_classification_report_txt(report_str: str, save_path: str):
+    """
+    Saves the classification report string to a text file
+
+    Args:
+        report_str (str): The classification report string
+        save_path (str):    Full path to text file location report will be saved
+    """
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    with open(save_path, 'w', encoding="utf-8") as f:
+        f.write(report_str)
+    print(f"Classification report saved to: {save_path}")

@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
+import seaborn as sns
 import numpy as np
 import os
-import seaborn as sns
+import torch
 from typing import List, Dict
 
 def plot_confusion_matrix(cm: np.ndarray, class_names: List[str], save_path: str, normalize: bool=False, title: str='Confusion Matrix', cmap=plt.cm.Blues):
@@ -76,3 +77,60 @@ def plot_training_history(history: Dict[str, List[float]], save_path: str, title
     plt.savefig(save_path)
     plt.close()
     print(f"Training history plot saved to: {save_path}")
+
+
+def plot_sample_predictions(images: torch.Tensor, true_labels: List[int], predicted_labels: List[int],
+                             class_names: List[str], save_path: str, num_samples: int=25, title: str = 'Sample Predictions'):
+    """
+    Plots a grid of sample images with their true and predicted labels.
+
+    Args:
+        images (torch.Tensor): A batch of images tensors
+        true_labels (List[int]): List of true labels corresponding to the images
+        predicted_labels (List[int]): List of predicted labels
+        class_names (List[str]): List of class names
+        save_path (str): Full path to save the plot
+        num_samples (int): Number of samples to display in the grid
+        title (str): Title of plot
+    """
+    # Plot 25 images max
+    num_samples = min(num_samples, len(images), 25)
+
+    # Determine Grid Size
+    grid_size = int(np.ceil(np.sqrt(num_samples)))
+
+    # Create Figure and Subplots
+    fig, axes = plt.subplots(grid_size, grid_size, figsize=(12,12))
+
+    # Flatten the axes
+    axes = axes.flatten()
+
+    for i in range(num_samples):
+        ax = axes[i]
+
+        # Denormalize assuming original normalization was (x - 0.5) / 0.5
+        display_image = (images[i].cpu().numpy() * 0.5 + 0.5).clip(0,1)
+
+        # PyTorch images (channel, height, width).  Maplotlib grayscale should be (height, width).
+        ax.imshow(display_image.squeeze(), cmap='gray')
+        ax.set_xticks([])
+        ax.set_yticks([])
+
+        # Set Color and Title
+        isCorrect = (true_labels[i] == predicted_labels[i])
+        color = "green" if isCorrect else "red"
+        ax.set_title(f"True: {class_names[true_labels[i]]} \nPredicted: {class_names[predicted_labels[i]]}", color=color, fontsize=10)
+    
+    # Hide unused subplots
+    for j in range(num_samples, len(axes)):
+        axes[j].axis('off')
+
+    plt.suptitle(title, fontsize=16)
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+
+    # Save Figures
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    plt.savefig(save_path)
+    plt.close()
+    print(f"Sample predictions plot saved to: {save_path}")
+    
