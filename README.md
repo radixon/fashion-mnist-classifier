@@ -127,55 +127,54 @@ mlflow ui
 - Navigate to the address displayed in terminal (http://<localhost>:5000)
 
 ## Project Structure
+```
 fashion-mnist-classifier/ <br/>
-├── .git/                     # Git version control metadata<br/>
-├── .venv/                    # Python virtual environment<br/>
-├── configs/                  # Configuration files for the project<br/>
-│   └── config.yaml           # Main configuration for data, training, model, and paths<br/>
-├── data/                     # Stores all project data<br/>
-│   ├── raw/                  # Original, raw dataset files (downloaded by torchvision)<br/>
-│   │   └── FashionMNIST/     # (Contains the actual .gz data files)<br/>
+├── .git/                     # Git version control metadata
+├── .venv/                    # Python virtual environment
+├── configs/                  # Configuration files for the project
+│   └── config.yaml           # Main configuration for data, training, model, and paths
+├── data/                     # Stores all project data
+│   ├── raw/                  # Original, raw dataset files (downloaded by torchvision)
+│   │   └── FashionMNIST/     # (Contains the actual .gz data files)
 │   │       └── raw/<br/>
-│   │       └── processed/    # (Used by torchvision for some datasets, but empty for F-MNIST)<br/>
-│   ├── processed/            # For cleaned/transformed data (currently empty)<br/>
-│   └── external/             # For external/supplementary data (currently empty)<br/>
-├── mlruns/                   # MLflow tracking data (ignored by Git)<br/>
-├── notebooks/                # Jupyter Notebooks for exploration and experimentation<br/>
-│   ├── 01_data_exploration.ipynb # In-depth EDA of the Fashion MNIST dataset<br/>
-│   └── 02_baseline_models.ipynb  # Rapid experimentation with baseline models<br/>
-├── scripts/                  # Executable Python scripts for various tasks<br/>
-│   ├── train.py              # Main script to train the model<br/>
-│   └── evaluate.py           # Script to evaluate a trained model<br/>
-├── src/                      # Source code for the project<br/>
-│   ├── __init__.py           # Marks 'src' as a Python package<br/>
-│   ├── data/                 # Data loading and preprocessing modules<br/>
-│   │   ├── __init__.py       # Marks 'src/data' as a Python sub-package<br/>
-│   │   ├── data_loader.py    # Functions to load datasets and create DataLoaders<br/>
-│   │   └── preprocessing.py  # Defines image transformations (ToTensor, Normalize)<br/>
-│   ├── evaluation/           # Modules for model evaluation and visualization<br/>
-│   │   ├── __init__.py       # Marks 'src/evaluation' as a Python sub-package<br/>
-│   │   ├── evaluator.py      # Core logic for calculating metrics<br/>
-│   │   └── visualization.py  # Functions for plotting results (e.g., confusion matrix)<br/>
-│   ├── model/                # Neural network model definitions<br/>
-│   │   ├── __init__.py       # Marks 'src/model' as a Python sub-package<br/>
-│   │   ├── base_model.py     # Abstract base class for all models<br/>
-│   │   └── cnn_models.py     # SimpleCNN and DeepCNN implementations<br/>
-│   ├── training/             # Modules for training logic<br/>
-│   │   ├── __init__.py       # Marks 'src/training' as a Python sub-package<br/>
-│   │   └── trainer.py        # Manages the training and validation loops<br/>
-│   │   └── callbacks.py      # (Placeholder, will be implemented soon)<br/>
-│   │   └── metrics.py        # (Placeholder, will be implemented soon)<br/>
-│   └── utils/                # General utility functions<br/>
-│       ├── __init__.py       # Marks 'src/utils' as a Python sub-package<br/>
-│       ├── config.py         # Handles loading configuration from YAML<br/>
-│       ├── helpers.py        # General helper functions (e.g., timestamp, class names)<br/>
-│       └── logger.py         # Centralized logging setup<br/>
-├── .gitignore                # Specifies files/folders to be ignored by Git<br/>
-├── LICENSE                   # Project's license (e.g., MIT)<br/>
-├── README.md                 # Project overview and documentation<br/>
-├── requirements.txt          # Python dependencies<br/>
-└── setup.py                  # Project packaging configuration<br/>
-
+│   │       └── processed/    # (Used by torchvision for some datasets, but empty for F-MNIST)
+│   ├── processed/            # For cleaned/transformed data (currently empty)
+│   └── external/             # For external/supplementary data (currently empty)
+├── mlruns/                   # MLflow tracking data (ignored by Git)
+├── notebooks/                # Jupyter Notebooks for exploration and experimentation
+│   ├── 01_data_exploration.ipynb # In-depth EDA of the Fashion MNIST dataset
+│   └── 02_baseline_models.ipynb  # Rapid experimentation with baseline models
+├── scripts/                  # Executable Python scripts for various tasks
+│   ├── train.py              # Main script to train the model
+│   └── evaluate.py           # Script to evaluate a trained model
+├── src/                      # Source code for the project
+│   ├── __init__.py           # Marks 'src' as a Python package
+│   ├── data/                 # Data loading and preprocessing modules
+│   │   ├── __init__.py       # Marks 'src/data' as a Python sub-package
+│   │   ├── data_loader.py    # Functions to load datasets and create DataLoaders
+│   │   └── preprocessing.py  # Defines image transformations (ToTensor, Normalize)
+│   ├── evaluation/           # Modules for model evaluation and visualization
+│   │   ├── __init__.py       # Marks 'src/evaluation' as a Python sub-package
+│   │   ├── evaluator.py      # Core logic for calculating metrics
+│   │   └── visualization.py  # Functions for plotting results (e.g., confusion matrix)
+│   ├── model/                # Neural network model definitions
+│   │   ├── __init__.py       # Marks 'src/model' as a Python sub-package
+│   │   ├── base_model.py     # Abstract base class for all models
+│   │   └── cnn_models.py     # SimpleCNN and DeepCNN implementations
+│   ├── training/             # Modules for training logic
+│   │   ├── __init__.py       # Marks 'src/training' as a Python sub-package
+│   │   └── trainer.py        # Manages the training and validation loops
+│   └── utils/                # General utility functions
+│       ├── __init__.py       # Marks 'src/utils' as a Python sub-package
+│       ├── config.py         # Handles loading configuration from YAML
+│       ├── helpers.py        # General helper functions (e.g., timestamp, class names)
+│       └── logger.py         # Centralized logging setup
+├── .gitignore                # Specifies files/folders to be ignored by Git
+├── LICENSE                   # Project's license (e.g., MIT)
+├── README.md                 # Project overview and documentation
+├── requirements.txt          # Python dependencies
+└── setup.py                  # Project packaging configuration
+```
 
 ## MLOps & Experiment Tracking
 

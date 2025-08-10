@@ -20,6 +20,7 @@ from data.preprocessing import get_transforms
 from models.cnn_models import VanillaCNN, DeepCNN
 from models.resnet_model import FashionResNet
 from training.trainer import ModelTrainer
+from training.callbacks import EarlyStopping, ModelCheckpoint
 from evaluation.evaluator import ModelEvaluator, save_metrics
 from evaluation.visualization import plot_confusion_matrix, plot_training_history
 from utils.config import load_config
@@ -113,8 +114,19 @@ def main():
         else:
             logger.error(f"Unknown optimizer: {training_config['optimizer']}")
             sys.exit(1)
+        
+        # Initialize Callbacks
+        early_stopping_config = training_config['callbacks']['early_stopping']
+        model_checkpoint_config = training_config['callbacks']['model_checkpoint']
 
-        # Model Trainer
+        early_stopping = EarlyStopping(monitor=early_stopping_config['monitor'], mode=early_stopping_config['mode'], patience=early_stopping_config['patience'], 
+                                       min_delta=early_stopping_config['min_delta'])
+        
+        model_checkpoint_filepath = os.path.join(paths_config['model_save_dir'], model_checkpoint_config['filepath'])
+        model_checkpoint = ModelCheckpoint(filepath=model_checkpoint_filepath, monitor=model_checkpoint_config['monitor'], mode=model_checkpoint_config['mode'],
+                                           save_best_only=model_checkpoint_config['save_best_only'])
+
+        # Model Training
         logger.info("===== Begin Training =====")
 
         # Create an instance of the ModelTrainer
@@ -122,6 +134,9 @@ def main():
 
         # Store History
         history = {'train_loss':[], 'train_accuracy':[], 'val_loss': [], 'val_accuracy': []}
+
+        # Store the best validation metric for early stopping and model checkpoint
+        best_val_metric = float('inf') if early_stopping_config['mode'] == 'min' else float('-inf')
 
         # Training Loop
         for epoch in range(1, training_config['epochs'] + 1):
@@ -145,16 +160,38 @@ def main():
             history['train_accuracy'].append(train_accuracy)
             history['val_loss'].append(val_loss)
             history['val_accuracy'].append(val_accuracy)
-            
+
+            # Callback Logic
+            current_val_metric = val_loss if early_stopping_config['monitor'] == 'val_loss' else val_accuracy
+
+            # Early Stopping Check
+            early_stopping(current_val_metric)
+            if early_stopping.stop_training:
+                logger.info("Early stopping critera met. Training Stopped")
+                break
+
+            # Checkpointing Check
+            model_checkpoint(model, current_val_metric, epoch)
         logger.info("\n===== Training Complete =====")
 
-        # Save training model state dictionary
-        model_save_path = paths_config['model_save_dir']
-        temp_model_file = paths_config['temp_model_file']
-        os.makedirs(model_save_path, exist_ok=True)
-        full_model_save_path = os.path.join(model_save_path, temp_model_file)
-        torch.save(model.state_dict(), full_model_save_path)
-        logger.info(f"Model state dictionary saved to: {full_model_save_path}")
+        # Saving model state dictionary now handled by model_checkpoint(...)
+            # Save training model state dictionary
+            # model_save_path = paths_config['model_save_dir']
+            # temp_model_file = paths_config['temp_model_file']
+            # os.makedirs(model_save_path, exist_ok=True)
+            # full_model_save_path = os.path.join(model_save_path, temp_model_file)
+            # torch.save(model.state_dict(), full_model_save_path)
+            # logger.info(f"Model state dictionary saved to: {full_model_save_path}")
+        
+        # Load the best model's state_dict
+        if os.path.exists(model_checkpoint_filepath):
+            logger.info(f"Loading Best Model from {model_checkpoint_filepath} for evaluation.")
+            model.load_state_dict(torch.load(model_checkpoint_filepath, map_location=device))
+        else:
+            logger.warning("Best Model Checkpoint not found. Using model from last epoch for evaluation.")
+        
+        # Log Model in MLflow
+        mlflow.pytorch.log_model(pytorch_model=model, artifact_path="model", registered_model_name=f"Model logged to MLflow as artifact path 'model'.")
 
         # Perform Evaluation and Log Results
         logger.info("\nPerforming evaluation and logging results")
