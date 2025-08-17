@@ -133,4 +133,3 @@ def plot_sample_predictions(images: torch.Tensor, true_labels: List[int], predic
     plt.savefig(save_path)
     plt.close()
     print(f"Sample predictions plot saved to: {save_path}")
-    

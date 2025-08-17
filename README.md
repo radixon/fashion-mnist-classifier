@@ -37,7 +37,7 @@ This project delivers a **comprehensive, end-to-end deep learning solution** for
 ## Key Results
 
 *   **Model Performance:** The `DeepCNN` model, leveraging Batch Normalization and Dropout, consistently achieves higher validation accuracy **~93%** after 10 epochs compared to the `VanillaCNN` **~91%**.
-*   **Experiment Tracking:** Over **[Number of runs you have logged, e.g., 5-10]** unique experiment runs have been logged and can be compared using the MLflow UI, demonstrating efficient hyperparameter tuning and model selection.
+*   **Experiment Tracking:** Over **15** unique experiment runs have been logged and can be compared using the MLflow UI, demonstrating efficient hyperparameter tuning and model selection.
 *   **Reproducibility:** All training runs are fully reproducible, with parameters, metrics, and models versioned in MLflow.
 
 ## Architecture Overview

@@ -1,10 +1,11 @@
 matplotlib
+mlflow
 numpy
 pandas
 pyyaml
 scikit-learn
 seaborn
+skorch
 torch
 torchvision
 tqdm
-mlflow
