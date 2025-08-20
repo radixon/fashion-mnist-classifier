@@ -144,6 +144,8 @@ fashion-mnist-classifier/
 ├── notebooks/                # Jupyter Notebooks for exploration and experimentation
 │   ├── 01_data_exploration.ipynb # In-depth EDA of the Fashion MNIST dataset
 │   └── 02_baseline_models.ipynb  # Rapid experimentation with baseline models
+│   ├── 03_advanced_models.ipynb  # Tuning advanced models' hyperparameters
+│   └── 04_model_comparison.ipynb # Analyze and compare models using models logged to MLflow
 ├── scripts/                  # Executable Python scripts for various tasks
 │   ├── train.py              # Main script to train the model
 │   └── evaluate.py           # Script to evaluate a trained model

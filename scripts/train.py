@@ -7,6 +7,8 @@ import logging
 import mlflow
 import mlflow.pytorch
 import numpy as np
+import warnings
+warnings.filterwarnings("ignore")
 
 # Add the src directory of the project
 # script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -74,7 +76,7 @@ def main():
         transform = get_transforms()
 
         # Load datasets and apply transforms
-        train_dataset, test_dataset = load_datasets(raw_data_path=data_config['raw_data_path'], transforms=transform, download=False)
+        train_dataset, test_dataset = load_datasets(raw_data_path=data_config['raw_data_path'], transforms=transform, download=True)
 
         # Create DataLoaders
         train_loader, test_loader = get_dataloaders(train_dataset, test_dataset, batch_size=training_config['batch_size'], 
