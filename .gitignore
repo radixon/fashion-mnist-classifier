@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *.so
+.ipynb_checkpoints
 
 # Windows System Files
 .DS_Store
