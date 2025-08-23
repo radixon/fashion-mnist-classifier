@@ -11,18 +11,18 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from data.data_loader import get_dataloaders, load_datasets
 from src.data.preprocessing import get_transforms
 
-def get_data() -> Tuple[Dataset, Dataset]:
-    """
-    Get datasets necessary to test DataLoaders
-    """
-    transform = get_transforms()
-    train_dataset, test_dataset = load_datasets(raw_data_path='../data/raw/FashionMNIST/raw', transforms=transform, download=True)
-    return [train_dataset, test_dataset]
-
 class TestDataLoader:
     """
     Test suite for data loading functionality.
     """
+    @pytest.fixture
+    def get_data(self) -> Tuple[Dataset, Dataset]:
+        """
+        Get datasets necessary to test DataLoaders
+        """
+        transform = get_transforms()
+        train_dataset, test_dataset = load_datasets(raw_data_path='../data/raw/FashionMNIST/raw', transforms=transform, download=True)
+        return [train_dataset, test_dataset]
 
     def test_get_transforms(self):
         transform = get_transforms()
@@ -36,23 +36,21 @@ class TestDataLoader:
         assert 'Normalize' in transform_types, "Transform should include Normalize"
     
 
-    def test_get_dataloaders_returns_correct_types(self):
+    def test_get_dataloaders_returns_correct_types(self, get_data: Tuple[Dataset, Dataset]):
         """
         Test get_dataloaders returns DataLoader objects
         """
-        train, test = get_data()
-        train_loader, test_loader = get_dataloaders(train, test, batch_size=64)
+        train_loader, test_loader = get_dataloaders(get_data[0], get_data[1], batch_size=64)
 
         assert isinstance(train_loader, DataLoader), "train_loader should be a DataLoader"
         assert isinstance(test_loader, DataLoader), "test_loader should be a DataLoader"
     
-    def test_get_dataloaders_batch_size(self):
+    def test_get_dataloaders_batch_size(self, get_data: Tuple[Dataset, Dataset]):
         """
         Test that DataLoaders works with specified batch size.
         """
-        train, test = get_data()
         batch_size = 32
-        train_loader, test_loader = get_dataloaders(train, test, batch_size=batch_size)
+        train_loader, test_loader = get_dataloaders(get_data[0], get_data[1], batch_size=batch_size)
 
         # Get batch from each DataLoader
         train_batch = next(iter(train_loader))
@@ -62,12 +60,11 @@ class TestDataLoader:
         assert train_batch[0].shape[0] == batch_size, f"Train batch size should be {batch_size}"
         assert test_batch[0].shape[0] == batch_size, f"Test batch size should be {batch_size}"
     
-    def test_data_shapes(self):
+    def test_data_shapes(self, get_data: Tuple[Dataset, Dataset]):
         """
         Test that data has the correct shapes.
         """
-        train, test = get_data()
-        train_loader, test_loader = get_dataloaders(train, test, batch_size=64)
+        train_loader, test_loader = get_dataloaders(get_data[0], get_data[1], batch_size=64)
 
         # Get batch
         images, labels = next(iter(train_loader))
@@ -82,12 +79,11 @@ class TestDataLoader:
         assert images.dtype == torch.float32, f"Images should be float32, got {images.dtype}"
         assert labels.dtype == torch.int64, f"Labels should be int64, got {labels.dtype}"
     
-    def test_data_normalization(self):
+    def test_data_normalization(self, get_data: Tuple[Dataset, Dataset]):
         """
         Test that images are properly normalized.
         """
-        train, _ = get_data()
-        train_loader, _ = get_dataloaders(train, None, batch_size=64)
+        train_loader, _ = get_dataloaders(get_data[0], None, batch_size=64)
         images, _ = next(iter(train_loader))
 
         # After normalization, pixel values should be in the range [-1, 1]
@@ -95,13 +91,12 @@ class TestDataLoader:
         assert images.max() <= 1, "Normalized images should not have positive values with high magnitudes"
         assert images.min() >= -1, "Normalized images should not have negative values with high magnitudes"
 
-    def test_different_batch_sizes(self):
+    def test_different_batch_sizes(self, get_data: Tuple[Dataset, Dataset]):
         """
         Test that different batch sizes behave normally
         """
-        train, test = get_data()
         for batch_size in [16,32,64,128]:
-            train_loader, test_loader = get_dataloaders(train, test, batch_size=batch_size)
+            train_loader, test_loader = get_dataloaders(get_data[0], get_data[1], batch_size=batch_size)
             
             train_batch = next(iter(train_loader))
             test_batch = next(iter(test_loader))
