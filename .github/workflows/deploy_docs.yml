@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - main
+  # Allows workflow to be run manually from the Actions tab
+  workflow_dispatch:
 
 # Grant GITHUB_TOKEN permissions for deployment
 permissions:
@@ -13,19 +15,40 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
+  # Build Job
+  build:
     runs-on:  ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkou Repository
         uses: actions/checkout@v3
-
+      
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
           python-version: 3.9
       
-      - name: Install dependencies
-        run:  pip install -r requirements.txt
+      - name: Install Documentation Dependencies
+        run:  |
+          python3 -m pip install --upgrade pip
+          pip install mkdocs-material mkdocstrings mkdocstrings-python
+          pip install -e .
+        
+      - name: Build MKDocs Documentation
+        run:  mkdocs build --clean --strict
+      
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './site'
 
-      - name: Deploy documentation
-        run:  mkdocs gh-deploy --force
+  # Deployment     
+  deploy:
+    environment:
+      name: github-pages
+      url:  ${{steps.deployment.outputs.page_url}}
+    runs-on:  ubuntu-latest
+    needs:  build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
