@@ -45,5 +45,11 @@ models/*.h5
 # Test Scripts
 temp_data_test.py
 
+# Results & Logs
+results/
+experiments/
+logs/
+runs/
+
 # MLflow tracking
 mlruns/
