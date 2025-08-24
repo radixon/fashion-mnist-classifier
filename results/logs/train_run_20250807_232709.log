@@ -1,0 +1,73 @@
+2025-08-07 23:27:09,676 - root -INFO - Logging configured. Logs will be save to: results/logs/train_run_20250807_232709.log
+2025-08-07 23:27:09,677 - __main__ -INFO - ----- Fashion MNIST Training Script (MLflow Run ID: 8e9c74889e0343bcb3df2bb513a2eedc) -----
+2025-08-07 23:27:09,969 - __main__ -INFO -  Using Device: cuda
+2025-08-07 23:27:09,993 - __main__ -INFO - 
+Loading datasets and creating DataLoaders...
+2025-08-07 23:27:10,274 - __main__ -INFO - 
+Initializing model...
+2025-08-07 23:27:10,306 - __main__ -INFO - Model Architecture: 
+VanillaCNN(
+  (model): Sequential(
+    (0): Conv2d(1, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (4): ReLU()
+    (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): Flatten(start_dim=1, end_dim=-1)
+    (7): Linear(in_features=3136, out_features=128, bias=True)
+    (8): ReLU()
+    (9): Linear(in_features=128, out_features=10, bias=True)
+  )
+)
+2025-08-07 23:27:10,307 - __main__ -INFO - 
+Settig up loss function and optimizer
+2025-08-07 23:27:10,308 - __main__ -INFO - ===== Begin Training =====
+2025-08-07 23:27:10,570 - __main__ -INFO - 
+Epoch 1 of 10
+2025-08-07 23:27:17,175 - __main__ -INFO - Train Loss: 0.4364, Train Accuracy: 0.8415
+2025-08-07 23:27:17,774 - __main__ -INFO - Validation Loss: 0.3245, Validation Accuracy: 0.8823
+2025-08-07 23:27:17,856 - __main__ -INFO - 
+Epoch 2 of 10
+2025-08-07 23:27:20,751 - __main__ -INFO - Train Loss: 0.2835, Train Accuracy: 0.8964
+2025-08-07 23:27:21,194 - __main__ -INFO - Validation Loss: 0.2772, Validation Accuracy: 0.8998
+2025-08-07 23:27:21,274 - __main__ -INFO - 
+Epoch 3 of 10
+2025-08-07 23:27:24,296 - __main__ -INFO - Train Loss: 0.2345, Train Accuracy: 0.9131
+2025-08-07 23:27:24,805 - __main__ -INFO - Validation Loss: 0.2866, Validation Accuracy: 0.8944
+2025-08-07 23:27:24,885 - __main__ -INFO - 
+Epoch 4 of 10
+2025-08-07 23:27:27,770 - __main__ -INFO - Train Loss: 0.2014, Train Accuracy: 0.9254
+2025-08-07 23:27:28,260 - __main__ -INFO - Validation Loss: 0.2355, Validation Accuracy: 0.9145
+2025-08-07 23:27:28,338 - __main__ -INFO - 
+Epoch 5 of 10
+2025-08-07 23:27:31,246 - __main__ -INFO - Train Loss: 0.1737, Train Accuracy: 0.9352
+2025-08-07 23:27:31,707 - __main__ -INFO - Validation Loss: 0.2357, Validation Accuracy: 0.9163
+2025-08-07 23:27:31,788 - __main__ -INFO - 
+Epoch 6 of 10
+2025-08-07 23:27:34,695 - __main__ -INFO - Train Loss: 0.1509, Train Accuracy: 0.9439
+2025-08-07 23:27:35,169 - __main__ -INFO - Validation Loss: 0.2545, Validation Accuracy: 0.9144
+2025-08-07 23:27:35,249 - __main__ -INFO - 
+Epoch 7 of 10
+2025-08-07 23:27:38,143 - __main__ -INFO - Train Loss: 0.1299, Train Accuracy: 0.9518
+2025-08-07 23:27:38,653 - __main__ -INFO - Validation Loss: 0.2656, Validation Accuracy: 0.9113
+2025-08-07 23:27:38,733 - __main__ -INFO - 
+Epoch 8 of 10
+2025-08-07 23:27:41,806 - __main__ -INFO - Train Loss: 0.1115, Train Accuracy: 0.9581
+2025-08-07 23:27:42,283 - __main__ -INFO - Validation Loss: 0.2487, Validation Accuracy: 0.9186
+2025-08-07 23:27:42,363 - __main__ -INFO - 
+Epoch 9 of 10
+2025-08-07 23:27:45,251 - __main__ -INFO - Train Loss: 0.0965, Train Accuracy: 0.9642
+2025-08-07 23:27:45,726 - __main__ -INFO - Validation Loss: 0.2549, Validation Accuracy: 0.9204
+2025-08-07 23:27:45,806 - __main__ -INFO - 
+Epoch 10 of 10
+2025-08-07 23:27:48,734 - __main__ -INFO - Train Loss: 0.0802, Train Accuracy: 0.9702
+2025-08-07 23:27:49,206 - __main__ -INFO - Validation Loss: 0.3011, Validation Accuracy: 0.9115
+2025-08-07 23:27:49,287 - __main__ -INFO - 
+===== Training Complete =====
+2025-08-07 23:27:49,301 - __main__ -INFO - Model state dictionary saved to: models/vanilla_cnn_models.pth
+2025-08-07 23:27:49,302 - __main__ -INFO - 
+Performing evaluation and logging results
+2025-08-07 23:27:51,230 - __main__ -INFO - Accuracy: 0.9115
+2025-08-07 23:27:51,230 - __main__ -INFO - Evaluation Results and Plots logged as MLflow artifacts
+2025-08-07 23:27:51,251 - __main__ -INFO - ===== MLflow run finished =====

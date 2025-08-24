@@ -1,0 +1,67 @@
+# Data Configuration
+data:
+  raw_data_path: "data/raw"   # Path where PyTorch will download/save Fashion MNIST dataset
+  num_classes: 10             # Output layer classes for Fashion MNIST dataset
+  input_shape: [1, 28, 28]    # PyTorch image format (channels, height, width)
+
+# Training Configuration
+training:
+  batch_size: 64
+  learning_rate: 0.001
+  epochs: 20
+  optimizer: "Adam"
+  loss_function: "CrossEntropyLoss"   # Loss function is dependent on the number/type of output classes
+  device: "cuda"                      # "cuda" is the GPU detector
+  num_workers: 12                     # DataLoader Parameter: 0 == local testing, > 0 for faster loading
+  pin_memory: True                    # Speeds up data transfer to GPU
+  # Callbacks Configuration
+  callbacks:
+    early_stopping:
+      monitor: "val_accuracy"         # Metric early stopping is based on
+      mode: "max"                     # 'max' if monitoring accuracy, 'min' if monitoring loss
+      patience: 5                     # Number of epochs with no improvement before training stops
+      min_delta:  0.001               # Minimum change to qualify as an improvement
+    model_checkpoint:
+      monitor: "val_accuracy"         # Metric to monitor for saving the best model
+      mode: "max"                     # 'max' if monitoring accuracy, 'min' if monitoring loss
+      save_best_only: True            # Only save the model if the monitored metric improves
+      filepath:  "best_model.pth"     # Filename for best model
+
+# Model Configuration
+model:
+  name: "DeepCNN"                  # Model Name
+  # VanillaCNN
+  vanilla_cnn_params:         
+    conv1_out_channels: 32
+    conv2_out_channels: 64
+    linear1_features:   128
+  # DeepCNN
+  deep_cnn_params:
+    conv1_out_channels: 64
+    conv2_out_channels: 128
+    conv3_out_channels: 256
+    linear1_features: 512
+    dropout_rate: 0.3
+  # ResNetCNN
+  fashion_resnet_params:
+    block_type: "BasicBlock"
+    num_blocks: [2, 2, 2]
+    base_channels: 64
+
+# Paths Configuration
+paths:
+  model_save_dir: "models/"
+  figures_save_dir: "results/figures/"
+  metrics_save_dir: "results/metrics/"
+  evaluation_metrics_filename_prefix:  "evaluation_metrics_"
+  confusion_matrix_filename_prefix: "confusion_matrix_"
+  logs_dir: "results/logs/"
+  train_log_filename: "train_run_{timestamp}.log"
+  eval_log_filename:  "eval_run_{timestamp}.log"
+  classification_report_filename_prefix:  "classification_report"
+  best_model_filename:  "best_model.pth"
+
+# MLflow Configuration
+mlflow:
+  tracking_uri: "file:./mlruns"
+  experiment_name: "Fashion MNIST Classification"

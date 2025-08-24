@@ -1,0 +1,29 @@
+2025-08-03 23:47:10,133 - root -INFO - Logging configured. Logs will be save to: results/logs/eval_run_20250803_234710.log
+2025-08-03 23:47:10,133 - __main__ -INFO - ----- Fashion MNIST Evaluation Script (Logging Enabled) -----
+2025-08-03 23:47:10,257 - __main__ -INFO - Using Device: cuda
+2025-08-03 23:47:10,258 - __main__ -INFO - 
+Loading Test Dataset
+2025-08-03 23:47:10,578 - __main__ -INFO - 
+Loading Model From models/vanilla_cnn_models.pth
+2025-08-03 23:47:10,855 - __main__ -INFO - Model Successfully Loaded
+2025-08-03 23:47:10,855 - __main__ -INFO - 
+Starting Model Evaluation
+2025-08-03 23:47:15,634 - __main__ -INFO - 
+----- Evaluation Complete -----
+2025-08-03 23:47:15,635 - __main__ -INFO - Overall Accuracy: 0.9162
+2025-08-03 23:47:15,635 - __main__ -INFO - 
+Classification Report:
+
+2025-08-03 23:47:15,636 - __main__ -INFO -  T-Shirt/Top: Precision=0.83, Recall=0.90, F1-Score=0.86, Support=1000.0
+2025-08-03 23:47:15,636 - __main__ -INFO -  Trouser: Precision=0.99, Recall=0.98, F1-Score=0.98, Support=1000.0
+2025-08-03 23:47:15,636 - __main__ -INFO -  Pullover: Precision=0.87, Recall=0.88, F1-Score=0.88, Support=1000.0
+2025-08-03 23:47:15,636 - __main__ -INFO -  Dress: Precision=0.95, Recall=0.87, F1-Score=0.91, Support=1000.0
+2025-08-03 23:47:15,636 - __main__ -INFO -  Coat: Precision=0.85, Recall=0.89, F1-Score=0.87, Support=1000.0
+2025-08-03 23:47:15,637 - __main__ -INFO -  Sandal: Precision=0.96, Recall=0.99, F1-Score=0.98, Support=1000.0
+2025-08-03 23:47:15,637 - __main__ -INFO -  Shirt: Precision=0.79, Recall=0.75, F1-Score=0.77, Support=1000.0
+2025-08-03 23:47:15,637 - __main__ -INFO -  Sneaker: Precision=0.96, Recall=0.96, F1-Score=0.96, Support=1000.0
+2025-08-03 23:47:15,637 - __main__ -INFO -  Bag: Precision=0.98, Recall=0.98, F1-Score=0.98, Support=1000.0
+2025-08-03 23:47:15,637 - __main__ -INFO -  Ankle Boot: Precision=0.99, Recall=0.96, F1-Score=0.97, Support=1000.0
+2025-08-03 23:47:15,637 - __main__ -INFO -  accuracy: 0.92
+2025-08-03 23:47:15,638 - __main__ -INFO -  macro avg: Precision=0.92, Recall=0.92, F1-Score=0.92, Support=10000.0
+2025-08-03 23:47:15,638 - __main__ -INFO -  weighted avg: Precision=0.92, Recall=0.92, F1-Score=0.92, Support=10000.0

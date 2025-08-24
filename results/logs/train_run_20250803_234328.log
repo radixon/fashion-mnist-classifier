@@ -1,0 +1,68 @@
+2025-08-03 23:43:28,098 - root -INFO - Logging configured. Logs will be save to: results/logs/train_run_20250803_234328.log
+2025-08-03 23:43:28,099 - __main__ -INFO - ----- Fashion MNIST Training Script (Logging Enabled) -----
+2025-08-03 23:43:28,383 - __main__ -INFO -  Using Device: cuda
+2025-08-03 23:43:28,383 - __main__ -INFO - 
+Loading datasets and creating DataLoaders...
+2025-08-03 23:43:29,325 - __main__ -INFO - 
+Initializing model...
+2025-08-03 23:43:29,429 - __main__ -INFO - Model Architecture: 
+VanillaCNN(
+  (model): Sequential(
+    (0): Conv2d(1, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (4): ReLU()
+    (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): Flatten(start_dim=1, end_dim=-1)
+    (7): Linear(in_features=3136, out_features=128, bias=True)
+    (8): ReLU()
+    (9): Linear(in_features=128, out_features=10, bias=True)
+  )
+)
+2025-08-03 23:43:29,429 - __main__ -INFO - 
+Settig up loss function and optimizer
+2025-08-03 23:43:29,430 - __main__ -INFO - ===== Begin Training =====
+2025-08-03 23:43:29,942 - __main__ -INFO - 
+Epoch 1 of 10
+2025-08-03 23:43:50,508 - __main__ -INFO - Train Loss: 0.4346, Train Accuracy: 0.8446
+2025-08-03 23:43:52,235 - __main__ -INFO - Validation Loss: 0.3272, Validation Accuracy: 0.8813
+2025-08-03 23:43:52,236 - __main__ -INFO - 
+Epoch 2 of 10
+2025-08-03 23:44:02,326 - __main__ -INFO - Train Loss: 0.2755, Train Accuracy: 0.9000
+2025-08-03 23:44:03,869 - __main__ -INFO - Validation Loss: 0.2858, Validation Accuracy: 0.8941
+2025-08-03 23:44:03,869 - __main__ -INFO - 
+Epoch 3 of 10
+2025-08-03 23:44:13,889 - __main__ -INFO - Train Loss: 0.2296, Train Accuracy: 0.9164
+2025-08-03 23:44:15,195 - __main__ -INFO - Validation Loss: 0.2527, Validation Accuracy: 0.9095
+2025-08-03 23:44:15,195 - __main__ -INFO - 
+Epoch 4 of 10
+2025-08-03 23:44:25,345 - __main__ -INFO - Train Loss: 0.1988, Train Accuracy: 0.9275
+2025-08-03 23:44:26,743 - __main__ -INFO - Validation Loss: 0.2414, Validation Accuracy: 0.9133
+2025-08-03 23:44:26,744 - __main__ -INFO - 
+Epoch 5 of 10
+2025-08-03 23:44:36,783 - __main__ -INFO - Train Loss: 0.1732, Train Accuracy: 0.9373
+2025-08-03 23:44:38,119 - __main__ -INFO - Validation Loss: 0.2406, Validation Accuracy: 0.9194
+2025-08-03 23:44:38,119 - __main__ -INFO - 
+Epoch 6 of 10
+2025-08-03 23:44:48,251 - __main__ -INFO - Train Loss: 0.1507, Train Accuracy: 0.9448
+2025-08-03 23:44:49,583 - __main__ -INFO - Validation Loss: 0.2361, Validation Accuracy: 0.9155
+2025-08-03 23:44:49,583 - __main__ -INFO - 
+Epoch 7 of 10
+2025-08-03 23:44:59,665 - __main__ -INFO - Train Loss: 0.1295, Train Accuracy: 0.9528
+2025-08-03 23:45:00,954 - __main__ -INFO - Validation Loss: 0.2589, Validation Accuracy: 0.9181
+2025-08-03 23:45:00,954 - __main__ -INFO - 
+Epoch 8 of 10
+2025-08-03 23:45:11,007 - __main__ -INFO - Train Loss: 0.1118, Train Accuracy: 0.9594
+2025-08-03 23:45:12,477 - __main__ -INFO - Validation Loss: 0.2600, Validation Accuracy: 0.9225
+2025-08-03 23:45:12,477 - __main__ -INFO - 
+Epoch 9 of 10
+2025-08-03 23:45:22,528 - __main__ -INFO - Train Loss: 0.0927, Train Accuracy: 0.9660
+2025-08-03 23:45:24,013 - __main__ -INFO - Validation Loss: 0.2759, Validation Accuracy: 0.9180
+2025-08-03 23:45:24,014 - __main__ -INFO - 
+Epoch 10 of 10
+2025-08-03 23:45:34,098 - __main__ -INFO - Train Loss: 0.0795, Train Accuracy: 0.9703
+2025-08-03 23:45:35,628 - __main__ -INFO - Validation Loss: 0.2889, Validation Accuracy: 0.9162
+2025-08-03 23:45:35,629 - __main__ -INFO - 
+===== Training Complete =====
+2025-08-03 23:45:35,696 - __main__ -INFO - Model state dictionary saved to: models/vanilla_cnn_models.pth

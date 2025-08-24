@@ -1,0 +1,90 @@
+2025-08-13 01:29:14,115 - root -INFO - Logging configured. Logs will be save to: results/logs/train_run_20250813_012914.log
+2025-08-13 01:29:14,116 - __main__ -INFO - ----- Fashion MNIST Training Script (MLflow Run ID: cc06652857414e71b9066716b8bfcbac) -----
+2025-08-13 01:29:14,430 - __main__ -INFO -  Using Device: cuda
+2025-08-13 01:29:14,454 - __main__ -INFO - 
+Loading datasets and creating DataLoaders...
+2025-08-13 01:29:14,735 - __main__ -INFO - 
+Initializing model...
+2025-08-13 01:29:14,817 - __main__ -INFO - Model Architecture: 
+DeepCNN(
+  (model): Sequential(
+    (0): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (4): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (5): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): ReLU()
+    (7): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (8): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (9): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (10): ReLU()
+    (11): Flatten(start_dim=1, end_dim=-1)
+    (12): Linear(in_features=12544, out_features=512, bias=True)
+    (13): ReLU()
+    (14): Dropout(p=0.3, inplace=False)
+    (15): Linear(in_features=512, out_features=10, bias=True)
+  )
+)
+2025-08-13 01:29:14,818 - __main__ -INFO - 
+Settig up loss function and optimizer
+2025-08-13 01:29:14,820 - __main__ -INFO - ===== Begin Training =====
+2025-08-13 01:29:15,100 - __main__ -INFO - 
+Epoch 1 of 10
+2025-08-13 01:29:23,481 - __main__ -INFO - Train Loss: 0.4180, Train Accuracy: 0.8542
+2025-08-13 01:29:24,035 - __main__ -INFO - Validation Loss: 0.2808, Validation Accuracy: 0.8968
+2025-08-13 01:29:24,232 - training.callbacks -INFO - Epoch 1: 'val_accuracy' improved to 0.8968. Model saved to models/best_model.pth
+2025-08-13 01:29:24,232 - __main__ -INFO - 
+Epoch 2 of 10
+2025-08-13 01:29:28,444 - __main__ -INFO - Train Loss: 0.2704, Train Accuracy: 0.9015
+2025-08-13 01:29:28,918 - __main__ -INFO - Validation Loss: 0.2567, Validation Accuracy: 0.9051
+2025-08-13 01:29:29,206 - training.callbacks -INFO - Epoch 2: 'val_accuracy' improved to 0.9051. Model saved to models/best_model.pth
+2025-08-13 01:29:29,206 - __main__ -INFO - 
+Epoch 3 of 10
+2025-08-13 01:29:33,533 - __main__ -INFO - Train Loss: 0.2263, Train Accuracy: 0.9183
+2025-08-13 01:29:34,043 - __main__ -INFO - Validation Loss: 0.2309, Validation Accuracy: 0.9164
+2025-08-13 01:29:34,232 - training.callbacks -INFO - Epoch 3: 'val_accuracy' improved to 0.9164. Model saved to models/best_model.pth
+2025-08-13 01:29:34,232 - __main__ -INFO - 
+Epoch 4 of 10
+2025-08-13 01:29:38,695 - __main__ -INFO - Train Loss: 0.1929, Train Accuracy: 0.9287
+2025-08-13 01:29:39,277 - __main__ -INFO - Validation Loss: 0.2245, Validation Accuracy: 0.9169
+2025-08-13 01:29:39,465 - training.callbacks -INFO - Epoch 4: 'val_accuracy' improved to 0.9169. Model saved to models/best_model.pth
+2025-08-13 01:29:39,465 - __main__ -INFO - 
+Epoch 5 of 10
+2025-08-13 01:29:43,804 - __main__ -INFO - Train Loss: 0.1637, Train Accuracy: 0.9395
+2025-08-13 01:29:44,323 - __main__ -INFO - Validation Loss: 0.2168, Validation Accuracy: 0.9221
+2025-08-13 01:29:44,503 - training.callbacks -INFO - Epoch 5: 'val_accuracy' improved to 0.9221. Model saved to models/best_model.pth
+2025-08-13 01:29:44,503 - __main__ -INFO - 
+Epoch 6 of 10
+2025-08-13 01:29:48,740 - __main__ -INFO - Train Loss: 0.1403, Train Accuracy: 0.9475
+2025-08-13 01:29:49,227 - __main__ -INFO - Validation Loss: 0.2309, Validation Accuracy: 0.9217
+2025-08-13 01:29:49,306 - training.callbacks -INFO - Epoch 6: 'val_accuracy' did not improve. Model not saved.
+2025-08-13 01:29:49,306 - __main__ -INFO - 
+Epoch 7 of 10
+2025-08-13 01:29:53,536 - __main__ -INFO - Train Loss: 0.1167, Train Accuracy: 0.9563
+2025-08-13 01:29:54,078 - __main__ -INFO - Validation Loss: 0.2373, Validation Accuracy: 0.9260
+2025-08-13 01:29:54,284 - training.callbacks -INFO - Epoch 7: 'val_accuracy' improved to 0.9260. Model saved to models/best_model.pth
+2025-08-13 01:29:54,284 - __main__ -INFO - 
+Epoch 8 of 10
+2025-08-13 01:29:58,547 - __main__ -INFO - Train Loss: 0.0982, Train Accuracy: 0.9627
+2025-08-13 01:29:59,027 - __main__ -INFO - Validation Loss: 0.2415, Validation Accuracy: 0.9250
+2025-08-13 01:29:59,114 - training.callbacks -INFO - Epoch 8: 'val_accuracy' did not improve. Model not saved.
+2025-08-13 01:29:59,114 - __main__ -INFO - 
+Epoch 9 of 10
+2025-08-13 01:30:03,389 - __main__ -INFO - Train Loss: 0.0821, Train Accuracy: 0.9699
+2025-08-13 01:30:03,872 - __main__ -INFO - Validation Loss: 0.2608, Validation Accuracy: 0.9282
+2025-08-13 01:30:04,054 - training.callbacks -INFO - Epoch 9: 'val_accuracy' improved to 0.9282. Model saved to models/best_model.pth
+2025-08-13 01:30:04,054 - __main__ -INFO - 
+Epoch 10 of 10
+2025-08-13 01:30:08,247 - __main__ -INFO - Train Loss: 0.0677, Train Accuracy: 0.9738
+2025-08-13 01:30:08,745 - __main__ -INFO - Validation Loss: 0.2853, Validation Accuracy: 0.9265
+2025-08-13 01:30:08,824 - training.callbacks -INFO - Epoch 10: 'val_accuracy' did not improve. Model not saved.
+2025-08-13 01:30:08,825 - __main__ -INFO - 
+===== Training Complete =====
+2025-08-13 01:30:08,825 - __main__ -INFO - Loading Best Model from models/best_model.pth for evaluation.
+2025-08-13 01:30:36,292 - __main__ -INFO - Model logged to MLflow as artifact path 'model'.
+2025-08-13 01:30:36,293 - __main__ -INFO - 
+Performing evaluation and logging results
+2025-08-13 01:30:38,314 - __main__ -INFO - Accuracy: 0.9282
+2025-08-13 01:30:38,314 - __main__ -INFO - Evaluation Results and Plots logged as MLflow artifacts
+2025-08-13 01:30:38,335 - __main__ -INFO - ===== MLflow run finished =====

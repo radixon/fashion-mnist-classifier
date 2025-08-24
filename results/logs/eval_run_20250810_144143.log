@@ -1,0 +1,12 @@
+2025-08-10 14:41:43,619 - root -INFO - Logging configured. Logs will be save to: results/logs/eval_run_20250810_144143.log
+2025-08-10 14:41:43,620 - __main__ -INFO - ----- Fashion MNIST Evaluation Script (Logging Enabled) -----
+2025-08-10 14:41:43,782 - __main__ -INFO - Using Device: cuda
+2025-08-10 14:41:43,782 - __main__ -INFO - 
+Loading Test Dataset
+2025-08-10 14:41:44,146 - __main__ -INFO - 
+Loading Model From models/best_model.pth
+2025-08-10 14:41:44,477 - __main__ -INFO - Model Successfully Loaded
+2025-08-10 14:41:44,477 - __main__ -INFO - 
+Starting Model Evaluation
+2025-08-10 14:41:48,554 - __main__ -INFO - 
+Generating Sample Predictions Plot

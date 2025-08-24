@@ -1,39 +1,46 @@
 # Python Cache
 __pycache__/
-*.py[cod]
-*.so
-*.ipynb_checkpoints/
+*.pyc
+*.pyo
+*.pyd
 
 # Windows System Files
 .DS_Store
 Thumbs.db
 
-# Virtual Environment
-.venv/
-env/
+# Distribution
 *.egg-info/
+*.egg
 
 # Environment Files
+.venv/
+venv/
+env/
+.Python/
 .env
+
+# Caches
+.cache/
+.pytest_cache/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# Data Folders
+data/raw
+data/processed/
+
+# Models & Checkpoints
+models/checkpoints/
+models/final/
+models/*.pth
+models/*.pt
+models/*.h5
 
 # VSCode and IDE configs
 .vscode/
 .idea/
-
-# Configuration
-*.yaml
-*.yml
-
-# Logs and Results
-logs/
-*.log
-results/
-experiments/
-runs/
-
-# Model Files
-models/
-checkpoints/
 
 # Test Scripts
 temp_data_test.py

@@ -1,0 +1,139 @@
+2025-08-10 10:53:25,421 - root -INFO - Logging configured. Logs will be save to: results/logs/train_run_20250810_105325.log
+2025-08-10 10:53:25,422 - __main__ -INFO - ----- Fashion MNIST Training Script (MLflow Run ID: cb470060848a444cb01848d4ff073d43) -----
+2025-08-10 10:53:25,861 - __main__ -INFO -  Using Device: cuda
+2025-08-10 10:53:25,885 - __main__ -INFO - 
+Loading datasets and creating DataLoaders...
+2025-08-10 10:53:26,704 - __main__ -INFO - 
+Initializing model...
+2025-08-10 10:53:26,935 - __main__ -INFO - Model Architecture: 
+FashionResNet(
+  (model): Sequential(
+    (0): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+    (3): Sequential(
+      (0): BasicBlock(
+        (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+        (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential()
+      )
+      (1): BasicBlock(
+        (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+        (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential()
+      )
+    )
+    (4): Sequential(
+      (0): BasicBlock(
+        (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+        (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential(
+          (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BasicBlock(
+        (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+        (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential()
+      )
+    )
+    (5): Sequential(
+      (0): BasicBlock(
+        (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential(
+          (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BasicBlock(
+        (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (relu): ReLU(inplace=True)
+        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential()
+      )
+    )
+    (6): AdaptiveAvgPool2d(output_size=(1, 1))
+    (7): Flatten(start_dim=1, end_dim=-1)
+    (8): Linear(in_features=256, out_features=10, bias=True)
+  )
+)
+2025-08-10 10:53:26,936 - __main__ -INFO - 
+Settig up loss function and optimizer
+2025-08-10 10:53:26,937 - __main__ -INFO - ===== Begin Training =====
+2025-08-10 10:53:27,435 - __main__ -INFO - 
+Epoch 1 of 10
+2025-08-10 10:53:50,498 - __main__ -INFO - Train Loss: 0.4194, Train Accuracy: 0.8488
+2025-08-10 10:53:51,571 - __main__ -INFO - Validation Loss: 0.2963, Validation Accuracy: 0.8911
+2025-08-10 10:53:51,743 - training.callbacks -INFO - Epoch 1: 'val_accuracy' improved to 0.8911. Model saved to models/fashion_mnist_best_model.pth
+2025-08-10 10:53:51,744 - __main__ -INFO - 
+Epoch 2 of 10
+2025-08-10 10:54:03,385 - __main__ -INFO - Train Loss: 0.2584, Train Accuracy: 0.9058
+2025-08-10 10:54:04,134 - __main__ -INFO - Validation Loss: 0.2631, Validation Accuracy: 0.9057
+2025-08-10 10:54:04,266 - training.callbacks -INFO - Epoch 2: 'val_accuracy' improved to 0.9057. Model saved to models/fashion_mnist_best_model.pth
+2025-08-10 10:54:04,266 - __main__ -INFO - 
+Epoch 3 of 10
+2025-08-10 10:54:15,927 - __main__ -INFO - Train Loss: 0.2179, Train Accuracy: 0.9210
+2025-08-10 10:54:16,685 - __main__ -INFO - Validation Loss: 0.2406, Validation Accuracy: 0.9158
+2025-08-10 10:54:16,819 - training.callbacks -INFO - Epoch 3: 'val_accuracy' improved to 0.9158. Model saved to models/fashion_mnist_best_model.pth
+2025-08-10 10:54:16,819 - __main__ -INFO - 
+Epoch 4 of 10
+2025-08-10 10:54:28,490 - __main__ -INFO - Train Loss: 0.1908, Train Accuracy: 0.9311
+2025-08-10 10:54:29,270 - __main__ -INFO - Validation Loss: 0.2335, Validation Accuracy: 0.9164
+2025-08-10 10:54:29,402 - training.callbacks -INFO - Epoch 4: 'val_accuracy' improved to 0.9164. Model saved to models/fashion_mnist_best_model.pth
+2025-08-10 10:54:29,402 - __main__ -INFO - 
+Epoch 5 of 10
+2025-08-10 10:54:41,083 - __main__ -INFO - Train Loss: 0.1696, Train Accuracy: 0.9397
+2025-08-10 10:54:41,879 - __main__ -INFO - Validation Loss: 0.2146, Validation Accuracy: 0.9217
+2025-08-10 10:54:42,014 - training.callbacks -INFO - Epoch 5: 'val_accuracy' improved to 0.9217. Model saved to models/fashion_mnist_best_model.pth
+2025-08-10 10:54:42,015 - __main__ -INFO - 
+Epoch 6 of 10
+2025-08-10 10:54:53,699 - __main__ -INFO - Train Loss: 0.1446, Train Accuracy: 0.9482
+2025-08-10 10:54:54,454 - __main__ -INFO - Validation Loss: 0.2202, Validation Accuracy: 0.9251
+2025-08-10 10:54:54,587 - training.callbacks -INFO - Epoch 6: 'val_accuracy' improved to 0.9251. Model saved to models/fashion_mnist_best_model.pth
+2025-08-10 10:54:54,587 - __main__ -INFO - 
+Epoch 7 of 10
+2025-08-10 10:55:06,280 - __main__ -INFO - Train Loss: 0.1256, Train Accuracy: 0.9544
+2025-08-10 10:55:07,061 - __main__ -INFO - Validation Loss: 0.2232, Validation Accuracy: 0.9253
+2025-08-10 10:55:07,191 - training.callbacks -INFO - Epoch 7: 'val_accuracy' improved to 0.9253. Model saved to models/fashion_mnist_best_model.pth
+2025-08-10 10:55:07,191 - __main__ -INFO - 
+Epoch 8 of 10
+2025-08-10 10:55:18,860 - __main__ -INFO - Train Loss: 0.1040, Train Accuracy: 0.9622
+2025-08-10 10:55:19,624 - __main__ -INFO - Validation Loss: 0.2291, Validation Accuracy: 0.9228
+2025-08-10 10:55:19,704 - training.callbacks -INFO - Epoch 8: 'val_accuracy' did not improve. Model not saved.
+2025-08-10 10:55:19,704 - __main__ -INFO - 
+Epoch 9 of 10
+2025-08-10 10:55:31,383 - __main__ -INFO - Train Loss: 0.0839, Train Accuracy: 0.9698
+2025-08-10 10:55:32,146 - __main__ -INFO - Validation Loss: 0.2740, Validation Accuracy: 0.9200
+2025-08-10 10:55:32,225 - training.callbacks -INFO - Epoch 9: 'val_accuracy' did not improve. Model not saved.
+2025-08-10 10:55:32,225 - __main__ -INFO - 
+Epoch 10 of 10
+2025-08-10 10:55:43,891 - __main__ -INFO - Train Loss: 0.0661, Train Accuracy: 0.9759
+2025-08-10 10:55:44,652 - __main__ -INFO - Validation Loss: 0.2957, Validation Accuracy: 0.9142
+2025-08-10 10:55:44,731 - training.callbacks -INFO - Epoch 10: 'val_accuracy' did not improve. Model not saved.
+2025-08-10 10:55:44,732 - __main__ -INFO - 
+===== Training Complete =====
+2025-08-10 10:55:44,733 - __main__ -INFO - Loading Best Model from models/fashion_mnist_best_model.pth for evaluation.
+2025-08-10 10:56:07,681 - __main__ -INFO - 
+Performing evaluation and logging results
+2025-08-10 10:56:10,006 - __main__ -INFO - Accuracy: 0.9253
+2025-08-10 10:56:10,006 - __main__ -INFO - Evaluation Results and Plots logged as MLflow artifacts
+2025-08-10 10:56:10,026 - __main__ -INFO - ===== MLflow run finished =====

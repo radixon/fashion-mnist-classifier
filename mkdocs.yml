@@ -1,0 +1,50 @@
+# mkdocs.yml
+
+site_name: Fashion MNIST Classifier Project
+site_url: https://radixon.github.io/fashion-mnist-classifier/ # Placeholder, update later if deploying to GitHub Pages
+site_description: A comprehensive deep learning pipeline for Fashion MNIST classification using PyTorch.
+
+# Theme configuration
+theme:
+  name: material
+  palette:
+    scheme: default       # Options: default, slate (dark mode)
+    primary: deep orange  # Primary color for headers, etc.
+    accent: indigo        # Accent color for links, etc.
+  features:
+    - navigation.tabs     # Use tabs for top-level navigation
+    - navigation.path     # Show current path in navigation
+    - navigation.top      # Scroll to top button
+    - search.suggest      # Search suggestions
+    - search.highlight    # Highlight search results
+    - content.tabs.link   # Linkable tabs in content
+    - content.code.annotate # Code annotation support
+    - content.code.copy   # Copy button for code blocks
+
+# Plugins for MkDocs
+plugins:
+  - search        # Enables search functionality
+  - mkdocstrings: # Configure mkdocstrings for Python
+      handlers:
+        python:
+          paths: [src] # mkdocstrings will look for Python code in the 'src' directory
+          show_root_heading: true
+          show_object_full_path: false # Don't show full path in headings
+          show_root_members_full_path: false
+          show_source: true # Link to source code
+          heading_level: 2 # Start headings from level 2 (##)
+          docstring_options:
+            - enable_type_description
+            - enable_default_value
+            - enable_name_in_signature
+            - enable_qualified_names
+          members_order: alphabetical
+          separate_signature: true
+
+# Navigation structure
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Usage: usage.md
+  - Project Structure:  project_structure.md
+  - API Reference: api_reference.md

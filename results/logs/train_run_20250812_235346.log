@@ -1,0 +1,5 @@
+2025-08-12 23:53:46,599 - root -INFO - Logging configured. Logs will be save to: results/logs/train_run_20250812_235346.log
+2025-08-12 23:53:46,599 - __main__ -INFO - ----- Fashion MNIST Training Script (MLflow Run ID: cb04d311bbf848b3bd4e030086ca2ec5) -----
+2025-08-12 23:53:46,928 - __main__ -INFO -  Using Device: cuda
+2025-08-12 23:53:46,952 - __main__ -INFO - 
+Loading datasets and creating DataLoaders...
