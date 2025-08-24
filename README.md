@@ -1,6 +1,6 @@
 # Fashion MNIST Classifier: End-to-End Deep Learning Pipeline with MLOps
 
-
+![CI Status](https://github.com/radixon/fashion-mnist-classifier/actions/workflows/ci.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Project Description
