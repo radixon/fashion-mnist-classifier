@@ -53,3 +53,22 @@ jobs:
         pip install black
         black --check ---diff src/
       continue-on-error:  true
+  
+  docs:
+    runs-on:  ubuntu latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      
+      - name: Install dependencies
+        run:  |
+          pip install --upgrade pip
+          pip install mkdocs mkdocs-material mkdocstrings[python]
+      
+      - name: Deploy docs
+        run:  mkdocs gh-deploy --force
