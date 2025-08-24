@@ -2,6 +2,7 @@ import yaml
 import os
 from typing import Dict, Any
 
+
 def load_config(config_path: str = 'configs/config.yaml') -> Dict[str, Any]:
     """
     Loads configuration parameters from a YAML file.
@@ -15,10 +16,10 @@ def load_config(config_path: str = 'configs/config.yaml') -> Dict[str, Any]:
     # Verify path to Configuration File exists
     if not os.path.exists(config_path):
         raise FileNotFoundError(f"Configuration File not found at: {config_path}")
-    
+
     with open(config_path, 'r') as f:
         config = yaml.safe_load(f)
-    
+
     return config
 
 

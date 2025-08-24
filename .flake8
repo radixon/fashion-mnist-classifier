@@ -1,0 +1,17 @@
+[flake8]
+max-line-length = 127
+exclude = 
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    .pytest_cache,
+    notebooks/.ipynb_checkpoints
+ignore = 
+    # E203: whitespace before ':'
+    E203,
+    # W503: line break before binary operator
+    W503
+per-file-ignores = 
+    # Ignore import order in __init__.py files
+    __init__.py:F401

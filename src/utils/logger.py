@@ -2,9 +2,12 @@ import logging
 import os
 import sys
 from datetime import datetime
-from typing import Optional
 
-def setup_logging(log_dir: str, log_filename: str, level: int = logging.INFO, console_output: bool=True) -> logging.Logger:
+
+def setup_logging(log_dir: str,
+                  log_filename: str,
+                  level: int = logging.INFO,
+                  console_output: bool = True) -> logging.Logger:
     """
     Logging configuration for the application.
     Logs will be written to a file and optionally to the console
@@ -14,11 +17,10 @@ def setup_logging(log_dir: str, log_filename: str, level: int = logging.INFO, co
         log_filename (str): Name of the log file.
         level (int): Logging level (logging.INFO, logging.DEBUG, etc.).
         console_output (bool): If True, logs are written to the console.
-    
+
     Returns:
         logging.Logger: The configured logger instance.
     """
-
     # Verify log directory exists
     os.makedirs(log_dir, exist_ok=True)
 
@@ -33,7 +35,7 @@ def setup_logging(log_dir: str, log_filename: str, level: int = logging.INFO, co
     if logger.handlers:
         for handler in logger.handlers:
             logger.removeHandler(handler)
-    
+
     # Define consistent format for log messages
     formatter = logging.Formatter('%(asctime)s - %(name)s -%(levelname)s - %(message)s')
 
@@ -50,6 +52,7 @@ def setup_logging(log_dir: str, log_filename: str, level: int = logging.INFO, co
 
     logger.info(f"Logging configured. Logs will be save to: {log_filepath}")
     return logger
+
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))

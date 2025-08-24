@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+
 
 def get_timestamp_str() -> str:
     """
@@ -8,4 +8,6 @@ def get_timestamp_str() -> str:
 
     return datetime.now().strftime("%Y%m%d_%H%M%S")
 
-FASHION_MNIST_CLASSES = ['T-Shirt/Top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle Boot']
+
+FASHION_MNIST_CLASSES = ['T-Shirt/Top', 'Trouser', 'Pullover', 'Dress', 'Coat',
+                         'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle Boot']

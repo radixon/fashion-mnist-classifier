@@ -4,13 +4,14 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm  # Visually track progress during training/validation
 from typing import Tuple
 
+
 class ModelTrainer:
     """
     Manages the training and validation process.
 
     Orchestrates the forward/backward passes and optimization steps.
     """
-    def __init__(self, model: nn.Module, device: torch.device):
+    def __init__(self, model: nn.Module, device: torch.device) -> None:
         """
         Initializes ModelTrainer
 
@@ -21,7 +22,9 @@ class ModelTrainer:
         self.model = model.to(device)
         self.device = device
 
-    def train_mode(self, dataloader: DataLoader, optimizer: torch.optim.Optimizer, criterion: nn.Module) -> Tuple[float, float]:
+    def train_mode(self, dataloader: DataLoader,
+                   optimizer: torch.optim.Optimizer,
+                   criterion: nn.Module) -> Tuple[float, float]:
         """
         Performs one full training epoch over the provided dataloader.
 
@@ -29,7 +32,7 @@ class ModelTrainer:
             dataloader (DataLoader):  DataLoader provides training data in batches.
             optimizer (torch.optim.Optimizer):  The optimizer used to update model weights.
             criterion (nn.Module):  The loss function used to calculate the training loss
-        
+
         Returns:
             Tuple[float, float]:  Average training loss and average training accuracy
         """
@@ -64,14 +67,15 @@ class ModelTrainer:
             # Get the class with the highest probability
             _, predicted = torch.max(yhat.data, 1)
             total_samples += labels.size(0)
-            correct_predictions += (predicted == labels).sum().item() # Count accurate predictions
+            correct_predictions += (predicted == labels).sum().item()   # Count accurate predictions
 
         # Calculate average loss
         epoch_loss = running_loss / total_samples
         epoch_accuracy = correct_predictions / total_samples
         return epoch_loss, epoch_accuracy
-    
-    def validate_mode(self, dataloader: DataLoader, criterion: nn.Module):
+
+    def validate_mode(self, dataloader: DataLoader,
+                      criterion: nn.Module) -> Tuple[float, float]:
         """
         Performs one full validation epoch over the provided dataloader.  No gradient calculations
         are performed during validation.
@@ -104,8 +108,8 @@ class ModelTrainer:
                 running_loss += loss.item() * inputs.size(0)
                 _, predicted = torch.max(yhat.data, 1)
                 total_samples += labels.size(0)
-                correct_predictions += (predicted == labels).sum().item() # Count accurate predictions
-            
+                correct_predictions += (predicted == labels).sum().item()   # Count accurate predictions
+
         # Calculate average loss and average accuracy for current epoch
         epoch_loss = running_loss / total_samples
         epoch_accuracy = correct_predictions / total_samples

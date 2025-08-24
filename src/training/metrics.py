@@ -1,8 +1,11 @@
 import torch
-from sklearn.metrics import f1_score, precision_score, recall_score
+from sklearn.metrics import f1_score
 from typing import List, Union
 
-def calculate_f1_score(y_true: Union[torch.Tensor, List[int]], y_pred: Union[torch.Tensor, List[int]], average: str='weighted') -> float:
+
+def calculate_f1_score(y_true: Union[torch.Tensor, List[int]],
+                       y_pred: Union[torch.Tensor, List[int]],
+                       average: str = 'weighted') -> float:
     """
     Calculate F1-score
 
@@ -10,7 +13,7 @@ def calculate_f1_score(y_true: Union[torch.Tensor, List[int]], y_pred: Union[tor
         y_true: True Labels
         y_pred: Predicted Labels
         average (str): Type of averaging for F1-score
-    
+
     Returns:
         float: The calculated F1-score
     """

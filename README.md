@@ -171,6 +171,7 @@ fashion-mnist-classifier/
 │       ├── config.py         # Handles loading configuration from YAML
 │       ├── helpers.py        # General helper functions (e.g., timestamp, class names)
 │       └── logger.py         # Centralized logging setup
+├── tests/                    # Unit Tests
 ├── .gitignore                # Specifies files/folders to be ignored by Git
 ├── LICENSE                   # Project's license (e.g., MIT)
 ├── README.md                 # Project overview and documentation
