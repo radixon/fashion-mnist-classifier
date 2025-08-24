@@ -32,7 +32,7 @@ class EarlyStopping:
         self.epochs_no_improve = 0
         self.stop_training = False
 
-    def __call__(self, current_value: float):
+    def __call__(self, current_value: float) -> None:
         """
         Call this method after each validation epoch
         """
