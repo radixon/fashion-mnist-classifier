@@ -1,0 +1,33 @@
+name: Build Docker Image
+
+on:
+  push:
+    braches:  [ main, develop ]
+  pull_request:
+    braches:  [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on:  ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run:  |
+          docker buildx build \
+            --platform linux/amd64 \
+            -t fashion-mnist-classifier-cpu:latest \
+            -f docker/Dockerfile \
+            --load \
+            .
+
+      - name: Test the image by rnning a script
+        # Verify image build 
+        run:  |
+          docker run --rm fashion-mnist-classifer-cpu:latest python3 scripts/train.py --epochs 2

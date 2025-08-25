@@ -28,7 +28,7 @@ env/
 */.ipynb_checkpoints/
 
 # Data Folders
-data/raw/FashionMNIST/raw
+data/raw
 data/processed/
 
 # Models & Checkpoints
