@@ -11,7 +11,8 @@ jobs:
     runs-on:  ubuntu-latest
   
     strategy:
-      python-verison: 3.9
+      with:
+        python-verison: 3.9
     
     steps:
     - name: Checkout code
