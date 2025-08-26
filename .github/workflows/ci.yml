@@ -12,7 +12,7 @@ jobs:
   
     strategy:
       with:
-        python-verison: 3.9
+        python-verison: '3.9'
     
     steps:
     - name: Checkout code
@@ -63,7 +63,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: "3.9"
+          python-version: '3.9'
       
       - name: Install dependencies
         run:  |

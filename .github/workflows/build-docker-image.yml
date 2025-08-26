@@ -2,7 +2,7 @@ name: Build Docker Image
 
 on:
   push:
-    braches:  [ main, develop ]
+    braches:  [ main ]
   pull_request:
     braches:  [ main ]
   workflow_dispatch:
