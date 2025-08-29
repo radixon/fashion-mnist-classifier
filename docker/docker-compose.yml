@@ -1,0 +1,31 @@
+# docker/docker-compose.yml
+version: '3.8'
+
+services:
+  fashion-mnist-trainer:
+    build:
+      context:  ..
+      dockerfile: docker/Dockerfile
+    container_name: fashion-mnist-trainer
+    volumes:
+      - ../data:/app/data
+      - ../models:/app/models
+      - ../logs:/app/logs
+    command:  python scripts/train.py
+    environment:
+      - PYTHONPATH=/APP
+  
+  fashion-mnist-evaluator:
+    build:
+      context:  ..
+      dockerfile: docker/Dockerfile
+    container_name: fashion-mnist-evaluator
+    volumes:
+      - ../data:/app/data
+      - ../models:/app/models
+      - ../logs:/app/logs
+    command:  python  scripts/evaluate.py
+    environment:
+      - PYTHONPATH=/app
+    depends_on:
+      - fashion-mnist-trainer

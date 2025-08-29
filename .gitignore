@@ -24,7 +24,7 @@ env/
 .pytest_cache/
 
 # Jupyter Notebook checkpoints
-.ipynb_checkpoints/
+__ipynb_checkpoints__/
 */.ipynb_checkpoints/
 
 # Data Folders

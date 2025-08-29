@@ -112,7 +112,7 @@ python3 scripts/train.py
 python3 scripts/evaluate.py
 ```
 
-### Jupyter Lab
+## Jupyter Lab
 - JupyterLab
 ```bash
 jupyter lab
@@ -120,11 +120,40 @@ jupyter lab
 - 'notebooks/01_data_exploration.ipynb': Exploratory Data Analysis Notebook
 - 'notebooks/02_baseline_models.ipynb': Baseline Model Experimentation Notebook
 
-### MLflow UI
+## MLflow UI
 ```bash
 mlflow ui
 ```
 - Navigate to the address displayed in terminal (http://<localhost>:5000)
+
+## Docker Deployment
+
+#### Build and Run
+
+```
+# Build Docker image
+./docker/build.sh
+
+# Run training in container
+./docker/run_training.sh
+
+# Run evaluation in container
+./docker/run_evaluation.sh
+```
+
+### Docker Compose
+
+```
+cd docker/
+docker-compose up --build
+```
+
+### Development and Testing
+
+```
+# Run all tests
+python3 -m pytest tests/
+```
 
 ## Project Structure
 ```
@@ -149,6 +178,14 @@ fashion-mnist-classifier/
 ├── scripts/                  # Executable Python scripts for various tasks
 │   ├── train.py              # Main script to train the model
 │   └── evaluate.py           # Script to evaluate a trained model
+├── docker/                   # Docker configuration
+│   ├── Dockerfile            # Container definition
+│   ├── .dockerignore         # Docker ignore rules
+│   ├── build.sh              # Docker build script
+│   ├── run_training.sh       # Training in container
+│   ├── run_evaluation.sh     # Evaluation in container
+│   ├── run_prediction.sh     # Prediction in container
+│   └── docker-compose.yml    # Multi-service orchestration
 ├── src/                      # Source code for the project
 │   ├── __init__.py           # Marks 'src' as a Python package
 │   ├── data/                 # Data loading and preprocessing modules
