@@ -11,9 +11,13 @@ import numpy.typing as npt
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from src.models.cnn_models import VanillaCNN
+from src.models.cnn_models import VanillaCNN, DeepCNN
 from src.utils.config import load_config
-from src.utils.helpers import FASHION_MNIST_CLASSES
+
+FASHION_MNIST_CLASSES = [
+                        'T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
+                        'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot'
+]
 
 @st.cache_resource
 def load_model():
@@ -23,15 +27,32 @@ def load_model():
     Returns:
         Optional[torch.nn.Module]: The loaded PyTorch model if successful
     """
+    config = load_config()
+    data_config = config['data']
+    model_config = config['model']
+
+    model = None
+    model_name = "VanillaCNN"
+        
     try:
-        model_path = 'models/best_model.pth'
-        if os.path.exists(model_path):
-            model = VanillaCNN()
-            model.load_state_dict(torch.load(model_path, map_location='cpu'))
+        # model_path = f"models/{model_name}_model.pth"
+        if model_name == "VanillaCNN":
+            model = VanillaCNN(input_dim=tuple(data_config['input_shape']),
+                           num_classes=data_config['num_classes']
+                        )
+            model.load_state_dict(torch.load("models/vanillaCNN_model.pth", map_location='cpu'))
+            model.eval()
+            return model
+        elif model_name == "DeepCNN":
+            model = DeepCNN(input_dim=tuple(data_config['input_shape']),
+                        num_classes=data_config['num_classes'],
+                        **model_config['deep_cnn_params']
+                    )
+            model.load_state_dict(torch.load("models/deepCNN_model.pth", map_location='cpu'))
             model.eval()
             return model
         else:
-            st.error(f"Model file not found: {model_path}")
+            st.error(f"Model file not found: models/{model_name}_model.pth")
             return None
     except Exception as e:
         st.error(f"Error loading model: {e}")
@@ -146,7 +167,78 @@ def create_probability_chart(all_probabilities: npt.NDArray[np.float32], predict
 
     # Add Percentage Labels
     for i, prob in enumerate(all_probabilities):
-        ax.text(prob + 0.01 i, f'{prob:.1%}', va='center')
+        ax.text(prob + 0.01, i, f'{prob:.1%}', va='center')
     
     plt.tight_layout()
     return fig
+
+def main() -> None:
+    """
+    Set up Streamlit interface, handles unser interactions, processes uploaded images,
+    and displays prediction results.
+    """
+    st.set_page_config(
+                        page_title="Fashion MNIST Classifier",
+                        page_icon=":tshirt:",
+                        layout="wide"
+    )
+
+    st.title(":shirt: Fashion MNIST Classifier")
+    st.markdown("## Upload an image of clothing to classify the image!")
+
+    # Sidebar Information
+    st.sidebar.title("About")
+    st.sidebar.info("A Convolutional Neural Network trained on the Fashion MNIST dataset "
+                    "is used to classify clothing items into 10 categories.")
+    
+    st.sidebar.markdown("## Classes:")
+    for i, class_name in enumerate(FASHION_MNIST_CLASSES):
+        st.sidebar.write(f"{i}: {class_name}")
+    
+    # Load Model
+    model = load_model()
+    if model is None:
+        st.error("Failed to load model.  Please train a model.")
+        return
+
+    # Create file uploader
+    uploaded_file = st.file_uploader("Choose an image file",
+                                     type=['png', 'jpg', 'jpeg'],
+                                     help="Upload a grayscale or color image of clothing"
+                                    )
+    
+    if uploaded_file is not None:
+        try:
+            # Load and display image
+            image = Image.open(uploaded_file)
+            col1, col2 = st.columns(2)
+
+            with col1:
+                st.image(image, caption="Original Image", width=200)
+            
+            # Preprocess image
+            image_tensor, processed_array = preprocess_image(image)
+
+            with col1:
+                st.image(processed_array,
+                         caption="Processed Image (28x28)",
+                         width=200,
+                         clamp=True
+                        )
+            
+            # Make Prediction
+            predicted_class, confidence, all_probabilities = predict_image(model, image_tensor)
+
+            with col2:
+                display_prediction_results(predicted_class, confidence, all_probabilities)
+
+                # Create and display probability chart
+                fig = create_probability_chart(all_probabilities, predicted_class)
+                st.pyplot(fig)
+        except Exception as e:
+            st.error(f"Error processing image: {e}")
+            st.exception(e) # Show traceback for debugging
+
+
+if __name__ == "__main__":
+    main()

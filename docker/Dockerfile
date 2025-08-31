@@ -25,12 +25,16 @@ COPY setup.py .
 COPY src/ ./src/
 RUN pip install -e .
 
-# Copy necessary files
+# Copy application files
 COPY scripts/ ./scripts/
 COPY configs/ ./configs/
+COPY app/ ./app/
+
+# Copy best trained model
+COPY models/ ./models/
 
 # Create Directories
-RUN mkdir -p models data/raw data/processed logs
+RUN mkdir -p data/raw logs
 
 # Set Permissions
 RUN chmod +x scripts/*.py
@@ -39,4 +43,4 @@ RUN chmod +x scripts/*.py
 EXPOSE 8501
 
 # Default Command
-CMD ["python", "scripts/train.py"]
+CMD ["streamlit", "run", "app/streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.enableCORS=false", "--server.enableXsrfProtection=true"]
