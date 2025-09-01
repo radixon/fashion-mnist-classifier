@@ -1,5 +1,6 @@
 flake8 >= 7.1.2
 flask >= 2.3.0
+gunicorn == 21.2.0
 matplotlib >= 3.7.5
 mkdocs >= 1.5.3
 mkdocs-material >= 9.5.15

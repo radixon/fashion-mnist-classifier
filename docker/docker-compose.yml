@@ -29,3 +29,39 @@ services:
       - PYTHONPATH=/app
     depends_on:
       - fashion-mnist-trainer
+
+  streamlit-app:
+    build:
+      context:  ..
+      dockerfile: docker/Dockerfile
+    container_name: fasion-mnist-streamlit
+    ports:
+      - "8501:8501"
+    volumes:
+      - ../models:/app/models
+      - ../data:/app/data
+      - ../assets:/app/assets
+    command:  streamlit run app/streamlit_app.py --server.port=8501 --server.address=0.0.0.0 --server.enableCORS=false --server.enableXsrfProtection=false
+    environment:
+      - PYTHONPATH=/app
+    restart:  unless-stopped
+  
+  flask-api:
+    build:
+      context:  ..
+      dockerfile: docker/Dockerfile
+    container_name: fashion-mnist-api
+    ports:
+      - "5000:5000"
+      - "8000:8000"
+    volumes:
+      - ../models:/app/models
+      - ../data/raw:/app/data/raw
+    command:  gunicorn --bind 0.0.0.0:5000 app/flask_app.py
+    environment:
+      - PYTHONPATH=/app
+    restart:  unless-stopped
+
+networks:
+  default:
+    name: fashion-mnist-network
