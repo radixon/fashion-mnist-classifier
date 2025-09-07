@@ -7,71 +7,72 @@ import base64
 import io
 import numpy as np
 from PIL import Image
+import logging
 from typing import Dict, Any, Optional
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from src.models.cnn_models import VanillaCNN, DeepCNN
-from src.models.resnet_model import FashionResNet
+from src.models.model_factory import ModelFactory
+from src.models.ensemble import VotingEnsemble
 from src.utils.config import load_config
 
-app = Flask(__name__)
-CLASS_NAMES = [
-                'T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
-                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot'
-]
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-model = None
-model_config = None
-def load_model_instance():
+config = load_config('configs/config.yaml')
+data_config = config['data']
+training_config = config['training']
+model_config = config['model']
+paths_config = config['paths']
+device = torch.device("cpu")
+
+def load_model():
     """
     Load the trained model
     """
-    global model, model_config
+    model_name = model_config['name']
     try:
-        config = load_config('configs/config.yaml')
-        data_config = config['data']
-        model_config = config['model']
-        training_config = config['training']
-        paths_config = config['paths']
-        model_name = model_config['name']
-
         # Create model instance
-        if model_name == "VanillaCNN":
-            model = VanillaCNN(
-                input_dim=tuple(data_config['input_shape']),
-                num_classes=data_config['num_classes']
+        if model_name == "Ensemble":
+            logger.info("Loading Ensemble model")
+            ensemble_config = config['ensemble']
+            model_names = ensemble_config['models_to_include']
+            voting_type = ensemble_config['voting_type']
+
+            model = VotingEnsemble.create_ensemble(
+                        model_names=model_names,
+                        data_config=data_config,
+                        model_config=model_config,
+                        model_weights_dir=paths_config['model_save_dir'],
+                        voting_type=voting_type
             )
-        elif model_name == "DeepCNN":
-            model = DeepCNN(
-                input_dim=tuple(data_config['input_shape']),
-                num_classes=data_config['num_classes'],
-                **model_config.get('deep_cnn_params', {})
-            )
-        elif model_name == "FashionResNet":
-            model = FashionResNet(
-                input_dim=tuple(data_config['input_shape']),
-                num_classes=data_config['num_classes'],
-                **model_config.get('fashion_resnet_params', {})
-            )
-        
-        # Load model weights
-        model_checkpoint_config = training_config['callbacks']['model_checkpoint']
-        full_model_load_path = os.path.join(
-                                            paths_config['model_save_dir'],
-                                            model_checkpoint_config['filepath']
-                                        )
-        
-        if os.path.exists(full_model_load_path):
-            model.load_state_dict(torch.load(full_model_load_path, map_location='cpu'))
-            model.eval()
-            return True
+            logger.info(f"Ensemble loaded with base models: {base_model_names}")
+            return model
         else:
-            print(f"Model file not found: {full_model_load_path}")
-            return False
+            logger.info(f"Loading {model_name} model")
+
+            model = ModelFactory.create_model(model_name, data_config, model_config)
+
+            # Load model weights
+            model_checkpoint_config = training_config['callbacks']['model_checkpoint']
+            full_model_load_path = os.path.join(
+                                                paths_config['model_save_dir'],
+                                                model_checkpoint_config['filepath'].format(model_name=model_name)
+                                            )
+            
+            if os.path.exists(full_model_load_path):
+                model.load_state_dict(torch.load(full_model_load_path, map_location='cpu'))
+                logger.info(f"{model_name} model loaded successfully")
+                model.to(device)
+                model.eval()
+                return model
+            else:
+                raise FileNotFoundError(f"Model '{model_name}' not found at {full_model_load_path}.")
     except Exception as e:
-        print(f"Error loading model: {e}")
-        return False
+        logger.error(f"Model loading failed: {str(e)}")
+        raise
+
+app = Flask(__name__)
 
 @app.route('/health', methods=['GET'])
 def health_check() -> Dict[str, Any]:

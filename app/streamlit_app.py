@@ -11,7 +11,8 @@ import numpy.typing as npt
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from src.models.cnn_models import VanillaCNN, DeepCNN
+from src.models.model_factory import ModelFactory
+from src.models.ensemble import VotingEnsemble
 from src.utils.config import load_config
 
 FASHION_MNIST_CLASSES = [
@@ -30,32 +31,41 @@ def load_model():
     config = load_config()
     data_config = config['data']
     model_config = config['model']
+    paths_config = config['paths']
+    training_config = config['training']
 
     model = None
     model_name = "VanillaCNN"
-        
+    
+    if model_name == "Ensemble":
+        ensemble_config = config['ensemble']
+        model_names = ensemble_config['models_to_include']
+        voting_type = ensemble_config['voting_type']
+
+        try:
+            model = VotingEnsemble.create_ensemble(
+                model_names=model_names,
+                data_config=data_config,
+                model_config=model_config,
+                model_weights_dir=paths_config['model_save_dir'],
+                voting_type=voting_type
+            )
+            return model
+        except Exception as e:
+            st.error(f"Ensemble model loading failed: {str(e)}")
+            st.stop()
     try:
-        # model_path = f"models/{model_name}_model.pth"
-        if model_name == "VanillaCNN":
-            model = VanillaCNN(input_dim=tuple(data_config['input_shape']),
-                           num_classes=data_config['num_classes']
-                        )
-            model.load_state_dict(torch.load("models/vanillaCNN_model.pth", map_location='cpu'))
-            model.eval()
-            return model
-        elif model_name == "DeepCNN":
-            model = DeepCNN(input_dim=tuple(data_config['input_shape']),
-                        num_classes=data_config['num_classes'],
-                        **model_config['deep_cnn_params']
-                    )
-            model.load_state_dict(torch.load("models/deepCNN_model.pth", map_location='cpu'))
-            model.eval()
-            return model
-        else:
-            st.error(f"Model file not found: models/{model_name}_model.pth")
-            return None
+        model = ModelFactory.create_model(model_name, data_config, model_config)
+        model_checkpoint_config = training_config['callbacks']['model_checkpoint']
+        model_checkpoint_filepath = os.path.join(paths_config['model_save_dir'],
+                                                 model_checkpoint_config['filepath'].format(model_name=model_name))
+        
+        model.load_state_dict(torch.load(model_checkpoint_filepath, map_location=device))
+        model.to(device)
+        model.eval()
+        return model
     except Exception as e:
-        st.error(f"Error loading model: {e}")
+        st.error(f"Model creation failed: {str(e)}")
         return None
 
 def preprocess_image(image: Image.Image) -> Tuple[torch.Tensor, npt.NDArray[np.float32]]:

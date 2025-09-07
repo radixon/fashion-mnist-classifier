@@ -10,24 +10,19 @@ import numpy as np
 import warnings
 warnings.filterwarnings("ignore")
 
-# Add the src directory of the project
-# script_dir = os.path.dirname(os.path.abspath(__file__))
-# project_root = os.path.abspath(os.path.join(script_dir, '..'))
-# sys.path.insert(0, project_root)
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Import modules from src directory
-from data.data_loader import load_datasets, get_dataloaders
-from data.preprocessing import get_transforms
-from models.cnn_models import VanillaCNN, DeepCNN
-from models.resnet_model import FashionResNet
-from training.trainer import ModelTrainer
-from training.callbacks import EarlyStopping, ModelCheckpoint
-from evaluation.evaluator import ModelEvaluator, save_metrics
-from evaluation.visualization import plot_confusion_matrix, plot_training_history
-from utils.config import load_config
-from utils.logger import setup_logging
-from utils.helpers import get_timestamp_str, FASHION_MNIST_CLASSES
+from src.data.data_loader import load_datasets, get_dataloaders
+from src.data.preprocessing import get_transforms
+from src.models.model_factory import ModelFactory
+from src.training.trainer import ModelTrainer
+from src.training.callbacks import EarlyStopping, ModelCheckpoint
+from src.evaluation.evaluator import ModelEvaluator, save_metrics
+from src.evaluation.visualization import plot_confusion_matrix, plot_training_history
+from src.utils.config import load_config
+from src.utils.logger import setup_logging
+from src.utils.helpers import get_timestamp_str, FASHION_MNIST_CLASSES
 
 logger = logging.getLogger(__name__)
 
@@ -87,15 +82,10 @@ def main():
         model_name = model_config['name']
         
         # Create an instance of VanillaCNN
-        model = None
-        if model_name == "VanillaCNN":
-            model = VanillaCNN(input_dim=tuple(data_config['input_shape']), num_classes=data_config['num_classes'])
-        elif model_name == "DeepCNN":
-            model = DeepCNN(input_dim=tuple(data_config['input_shape']), num_classes=data_config['num_classes'], **model_config['deep_cnn_params'])
-        elif model_name == "FashionResNet":
-            model = FashionResNet(input_dim=tuple(data_config['input_shape']), num_classes=data_config['num_classes'], **model_config['fashion_resnet_params'])
-        else:
-            logger.error(f"Unknown Model Name: {model_name}")
+        try:
+            model = ModelFactory.create_model_from_config(model_name, data_config, model_config)
+        except ValueError as e:
+            logger.error(f"Model createion failed: {str(e)}")
             sys.exit(1)
         logger.info(f"Model Architecture: \n{model}") # Model Architecture
         
@@ -124,7 +114,7 @@ def main():
         early_stopping = EarlyStopping(monitor=early_stopping_config['monitor'], mode=early_stopping_config['mode'], patience=early_stopping_config['patience'], 
                                        min_delta=early_stopping_config['min_delta'])
         
-        model_checkpoint_filepath = os.path.join(paths_config['model_save_dir'], model_checkpoint_config['filepath'])
+        model_checkpoint_filepath = os.path.join(paths_config['model_save_dir'], model_checkpoint_config['filepath'].format(model_name=model_name))
         model_checkpoint = ModelCheckpoint(filepath=model_checkpoint_filepath, monitor=model_checkpoint_config['monitor'], mode=model_checkpoint_config['mode'],
                                            save_best_only=model_checkpoint_config['save_best_only'])
 
@@ -175,15 +165,6 @@ def main():
             # Checkpointing Check
             model_checkpoint(model, current_val_metric, epoch)
         logger.info("\n===== Training Complete =====")
-
-        # Saving model state dictionary now handled by model_checkpoint(...)
-            # Save training model state dictionary
-            # model_save_path = paths_config['model_save_dir']
-            # temp_model_file = paths_config['temp_model_file']
-            # os.makedirs(model_save_path, exist_ok=True)
-            # full_model_save_path = os.path.join(model_save_path, temp_model_file)
-            # torch.save(model.state_dict(), full_model_save_path)
-            # logger.info(f"Model state dictionary saved to: {full_model_save_path}")
         
         # Load the best model's state_dict
         if os.path.exists(model_checkpoint_filepath):

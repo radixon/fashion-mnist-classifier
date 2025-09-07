@@ -1,23 +1,23 @@
 import os
 import sys
 import torch
-import torch.nn as nn
 import numpy as np
 from datetime import datetime
 import logging
 import warnings
 warnings.filterwarnings("ignore")
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-from data.data_loader import load_datasets, get_dataloaders
-from data.preprocessing import get_transforms
-from models.cnn_models import VanillaCNN, DeepCNN
-from models.resnet_model import FashionResNet
-from evaluation.evaluator import ModelEvaluator, save_metrics, save_classification_report_txt
-from evaluation.visualization import plot_confusion_matrix, plot_sample_predictions
-from utils.config import load_config
-from utils.logger import setup_logging
-from utils.helpers import get_timestamp_str, FASHION_MNIST_CLASSES
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from src.data.data_loader import load_datasets, get_dataloaders
+from src.data.preprocessing import get_transforms
+from src.models.model_factory import ModelFactory
+from src.models.ensemble import VotingEnsemble
+from src.evaluation.evaluator import ModelEvaluator, save_metrics, save_classification_report_txt
+from src.evaluation.visualization import plot_confusion_matrix, plot_sample_predictions
+from src.utils.config import load_config
+from src.utils.logger import setup_logging
+from src.utils.helpers import get_timestamp_str, FASHION_MNIST_CLASSES
 
 logger = logging.getLogger(__name__)
 
@@ -50,14 +50,29 @@ def main():
     # Model Loading
     model_name = model_config['name']
     model = None
-    if model_name == "VanillaCNN":
-        model = VanillaCNN(input_dim=tuple(data_config['input_shape']), num_classes=data_config['num_classes'])
-    elif model_name == "DeepCNN":
-        model = DeepCNN(input_dim=tuple(data_config['input_shape']), num_classes=data_config['num_classes'], **model_config['deep_cnn_params'])
-    elif model_name == "FashionResNet":
-        model = FashionResNet(input_dim=tuple(data_config['input_shape']), num_classes=data_config['num_classes'], **model_config['fashion_resnet_params']) 
-    else:
-        logger.error(f"Unknown model name: {model_name}") 
+    if model_name == "Ensemble":
+        ensemble_config = config['ensemble']
+        model_names = ensemble_config['models_to_include']
+        voting_type = ensemble_config['voting_type']
+
+        model_instance = VotingEnsemble.create_ensemble(
+                            model_names=model_names,
+                            data_config=data_config,
+                            model_config=model_config,
+                            model_weights_dir=paths_config['model_save_dir'],
+                            voting_type=voting_type
+        )
+        logger.info("Loaded Ensemble model for evaluation")
+    try:
+        model_instance = ModelFactory.create_model(model_name, data_config, model_config)
+
+        model_checkpoint_config = training_config['callbacks']['model_checkpoint']
+        model_checkpoint_filepath = os.path.join(paths_config['model_save_dir'], model_checkpoint_config['filepath'].format(model_name=model_name))
+
+        model_instance.load_state_dict(torch.load(model_checkpoint_filepath, map_location=device))
+        logger.info(f"Loaded {model_name} model for evaluation")
+    except ValueError as e:
+        logger.error(f"Model creation failed: {str(e)}") 
         sys.exit(1)
     
     # Load the Best Model
@@ -143,7 +158,6 @@ if __name__ == "__main__":
         import numpy as np
         import sklearn
         import torch
-        import torch.nn
     except ImportError:
         print("Error: Libraries are missing. Install libraries: pip install numpy scikit-learn torch")
         sys.exit(1)
