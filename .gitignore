@@ -25,7 +25,7 @@ env/
 
 # Jupyter Notebook checkpoints
 __ipynb_checkpoints__/
-*/.ipynb_checkpoints/
+.ipynb_checkpoints/
 
 # Data Folders
 data/raw
