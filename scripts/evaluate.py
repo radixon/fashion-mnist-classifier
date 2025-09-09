@@ -51,11 +51,11 @@ def main():
     model_name = model_config['name']
     model = None
     if model_name == "Ensemble":
-        ensemble_config = config['ensemble']
+        ensemble_config = config['model']['ensemble']
         model_names = ensemble_config['models_to_include']
         voting_type = ensemble_config['voting_type']
 
-        model_instance = VotingEnsemble.create_ensemble(
+        model = VotingEnsemble.create_ensemble(
                             model_names=model_names,
                             data_config=data_config,
                             model_config=model_config,
@@ -63,27 +63,24 @@ def main():
                             voting_type=voting_type
         )
         logger.info("Loaded Ensemble model for evaluation")
-    try:
-        model_instance = ModelFactory.create_model(model_name, data_config, model_config)
+    else:
+        try:
+            model = ModelFactory.create_model_from_config(model_name, data_config, model_config)
 
-        model_checkpoint_config = training_config['callbacks']['model_checkpoint']
-        model_checkpoint_filepath = os.path.join(paths_config['model_save_dir'], model_checkpoint_config['filepath'].format(model_name=model_name))
+            model_checkpoint_config = training_config['callbacks']['model_checkpoint']
+            model_checkpoint_filepath = os.path.join(paths_config['model_save_dir'], model_checkpoint_config['filepath'].format(model_name=model_name))
 
-        model_instance.load_state_dict(torch.load(model_checkpoint_filepath, map_location=device))
-        logger.info(f"Loaded {model_name} model for evaluation")
-    except ValueError as e:
-        logger.error(f"Model creation failed: {str(e)}") 
-        sys.exit(1)
+            # Load the Best Model
+            if os.path.exists(model_checkpoint_filepath):
+                model.load_state_dict(torch.load(model_checkpoint_filepath, map_location=device))
+                logger.info(f"Loaded {model_name} model for evaluation")
+            else:
+                logger.error(f"Checkpoint not found at {model_checkpoint_filepath}")
+                sys.exit(1)
+        except ValueError as e:
+            logger.error(f"Model creation failed: {str(e)}") 
+            sys.exit(1)
     
-    # Load the Best Model
-    model_checkpoint_config = training_config['callbacks']['model_checkpoint']
-    full_model_load_path = os.path.join(paths_config['model_save_dir'], model_checkpoint_config['filepath'])
-    logger.info(f"\nLoading Model From {full_model_load_path}")
-    if not os.path.exists(full_model_load_path):
-        logger.error(f"Error: Model not found at {full_model_load_path}")
-        sys.exit(1)
-    
-    model.load_state_dict(torch.load(full_model_load_path, map_location=device))
     logger.info("Model Successfully Loaded")
 
     # Model Evaluation

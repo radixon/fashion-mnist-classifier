@@ -1,11 +1,10 @@
-import os
-import sys
+# import os
+# import sys
 import logging
 from typing import Dict, Any
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 from src.models.cnn_models import VanillaCNN, DeepCNN
 from src.models.resnet_model import FashionResNet
+# sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 
 logger = logging.getLogger(__name__)
 
@@ -16,22 +15,22 @@ class ModelFactory:
     """
     # Available Models
     _MODELS = {
-            "VanillaCNN": VanillaCNN,
-            "DeepCNN": DeepCNN,
-            "FashionResNet": FashionResNet
+        "VanillaCNN": VanillaCNN,
+        "DeepCNN": DeepCNN,
+        "FashionResNet": FashionResNet
     }
 
     _MODEL_PARAM_KEYS = {
-                    "VanillaCNN": [],
-                    "DeepCNN": ["deep_cnn_params"],
-                    "FashionResNet": ["fashion_resnet_params"]
+                "VanillaCNN": [],
+                "DeepCNN": ["deep_cnn_params"],
+                "FashionResNet": ["fashion_resnet_params"]
     }
 
     @classmethod
     def create_model(cls,
-                    model_name: str,
-                    data_config: Dict[str, Any],
-                    model_config: Dict[str, Any]) -> Any:
+                     model_name: str,
+                     data_config: Dict[str, Any],
+                     model_config: Dict[str, Any]) -> Any:
         """
         Create a model instance based on the model name and configuration.
 
@@ -53,8 +52,8 @@ class ModelFactory:
 
         # Prepare base parameters
         base_params = {
-                    'input_dim': tuple(data_config['input_shape']),
-                    'num_classes': data_config['num_classes']
+            'input_dim': tuple(data_config['input_shape']),
+            'num_classes': data_config['num_classes']
         }
 
         # Get model-specific parameters

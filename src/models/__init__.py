@@ -4,5 +4,7 @@ this directory can be used as a package
 
 from src.models.______ import ______
 '''
+from .base_model import BaseModel
 from .cnn_models import VanillaCNN, DeepCNN
 from .resnet_model import FashionResNet
+from .ensemble import VotingEnsemble

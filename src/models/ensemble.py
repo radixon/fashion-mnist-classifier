@@ -1,12 +1,11 @@
-import os
-import sys
+# import os
+# import sys
 import torch
 import torch.nn as nn
 import logging
 from typing import List, Dict, Any
-
-sys.path.insert(0,os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.models.model_factory import ModelFactory
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 logger = logging.getLogger(__name__)
 
@@ -56,11 +55,11 @@ class VotingEnsemble(nn.Module):
 
     @classmethod
     def create_ensemble(cls,
-                       model_names: List[str],
-                       data_config: Dict[str, Any],
-                       model_config: Dict[str, Any],
-                       model_weights_dir: str,
-                       voting_type: str = "soft"):
+                        model_names: List[str],
+                        data_config: Dict[str, Any],
+                        model_config: Dict[str, Any],
+                        model_weights_dir: str,
+                        voting_type: str = "soft"):
         """
         Create an ensemble by loading multiple trained models using model factory.
         """

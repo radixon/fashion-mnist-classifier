@@ -31,7 +31,7 @@ COPY configs/ ./configs/
 COPY app/ ./app/
 
 # Copy best trained model
-COPY models/ ./models/
+COPY src/models/ ./src/models/
 
 # Create Directories
 RUN mkdir -p data/raw logs
