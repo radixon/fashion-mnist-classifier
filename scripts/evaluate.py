@@ -1,14 +1,12 @@
 import os
 import sys
 import torch
+import torch.nn as nn
 import numpy as np
 from datetime import datetime
 import logging
 import warnings
-warnings.filterwarnings("ignore")
-
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from src.data.data_loader import load_datasets, get_dataloaders
 from src.data.preprocessing import get_transforms
 from src.models.model_factory import ModelFactory
@@ -18,6 +16,7 @@ from src.evaluation.visualization import plot_confusion_matrix, plot_sample_pred
 from src.utils.config import load_config
 from src.utils.logger import setup_logging
 from src.utils.helpers import get_timestamp_str, FASHION_MNIST_CLASSES
+warnings.filterwarnings("ignore")
 
 logger = logging.getLogger(__name__)
 
@@ -51,37 +50,47 @@ def main():
     model_name = model_config['name']
     model = None
     if model_name == "Ensemble":
+        if 'ensemble' not in config['model']:
+            logger.error("Ensemble configuration not found in config.yaml")
+            logger.error("Please add 'ensemble' section to config.yaml or change to individual model")
+            sys.exit(1)
         ensemble_config = config['model']['ensemble']
         model_names = ensemble_config['models_to_include']
         voting_type = ensemble_config['voting_type']
-
-        model = VotingEnsemble.create_ensemble(
-                            model_names=model_names,
-                            data_config=data_config,
-                            model_config=model_config,
-                            model_weights_dir=paths_config['model_save_dir'],
-                            voting_type=voting_type
-        )
-        logger.info("Loaded Ensemble model for evaluation")
+        try:
+            model = VotingEnsemble.create_ensemble(
+                                model_names=model_names,
+                                data_config=data_config,
+                                model_config=model_config,
+                                model_weights_dir=paths_config['model_save_dir'],
+                                voting_type=voting_type
+            )
+            logger.info("Loaded Ensemble model for evaluation")
+        except Exception as e:
+            logger.error(f"Failed to load ensemble: {str(e)}")
+            sys.exit(1)
     else:
         try:
             model = ModelFactory.create_model_from_config(model_name, data_config, model_config)
-
-            model_checkpoint_config = training_config['callbacks']['model_checkpoint']
-            model_checkpoint_filepath = os.path.join(paths_config['model_save_dir'], model_checkpoint_config['filepath'].format(model_name=model_name))
-
-            # Load the Best Model
-            if os.path.exists(model_checkpoint_filepath):
-                model.load_state_dict(torch.load(model_checkpoint_filepath, map_location=device))
-                logger.info(f"Loaded {model_name} model for evaluation")
-            else:
-                logger.error(f"Checkpoint not found at {model_checkpoint_filepath}")
-                sys.exit(1)
         except ValueError as e:
             logger.error(f"Model creation failed: {str(e)}") 
             sys.exit(1)
-    
+
+        model_checkpoint_config = training_config['callbacks']['model_checkpoint']
+        model_checkpoint_filepath = os.path.join(paths_config['model_save_dir'], model_checkpoint_config['filepath'].format(model_name=model_name))
+
+        # Load the Best Model
+        if not os.path.exists(model_checkpoint_filepath):
+            logger.error(f"Error: Model '{model_name}' checkpoint not found at {model_checkpoint_filepath}.")
+            logger.error(f"Please run scripts/train.py with model.name: {model_name} to train and save it.")
+            sys.exit(1)
+
+        model.load_state_dict(torch.load(model_checkpoint_filepath, map_location=device))
+        logger.info(f"Loaded {model_name} model for evaluation")
+
     logger.info("Model Successfully Loaded")
+    model.to(device)
+    model.eval()
 
     # Model Evaluation
     logger.info("\nStarting Model Evaluation")

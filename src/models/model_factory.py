@@ -1,10 +1,10 @@
-# import os
-# import sys
+import os
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 import logging
 from typing import Dict, Any
 from src.models.cnn_models import VanillaCNN, DeepCNN
 from src.models.resnet_model import FashionResNet
-# sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 
 logger = logging.getLogger(__name__)
 

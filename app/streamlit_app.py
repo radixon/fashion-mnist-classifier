@@ -8,9 +8,7 @@ from PIL import Image
 import streamlit as st
 from typing import Tuple
 import numpy.typing as npt
-
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-
 from src.models.model_factory import ModelFactory
 from src.models.ensemble import VotingEnsemble
 from src.utils.config import load_config
@@ -33,12 +31,18 @@ def load_model():
     model_config = config['model']
     paths_config = config['paths']
     training_config = config['training']
+    device = torch.device("cpu")
 
     model = None
     model_name = "VanillaCNN"
     
     if model_name == "Ensemble":
-        ensemble_config = config['ensemble']
+        st.info("Loading Ensemble Model")
+        if 'ensemble' not in config['model']:
+            st.error("Ensemble configuration not found in config.yaml")
+            st.stop()
+
+        ensemble_config = config['model']['ensemble']
         model_names = ensemble_config['models_to_include']
         voting_type = ensemble_config['voting_type']
 
@@ -50,12 +54,15 @@ def load_model():
                 model_weights_dir=paths_config['model_save_dir'],
                 voting_type=voting_type
             )
+            st.success(f"Ensemble loaded with base models: {model_names}")
+            model.to(device)
+            model.eval()
             return model
         except Exception as e:
             st.error(f"Ensemble model loading failed: {str(e)}")
             st.stop()
     try:
-        model = ModelFactory.create_model(model_name, data_config, model_config)
+        model = ModelFactory.create_model_from_config(model_name, data_config, model_config)
         model_checkpoint_config = training_config['callbacks']['model_checkpoint']
         model_checkpoint_filepath = os.path.join(paths_config['model_save_dir'],
                                                  model_checkpoint_config['filepath'].format(model_name=model_name))
@@ -120,9 +127,14 @@ def predict_image(model: torch.nn.Module, image_tensor: torch.Tensor) -> Tuple[i
                     -   Confidence score for the predicted class (0.0 - 1.0)
                     -   Array of probabilities for all classes (length 10)
     """
+    config = load_config()
+    model_name = config['model']['name']
     with torch.no_grad():
         outputs = model(image_tensor)
-        probabilities = torch.nn.functional.softmax(outputs, dim=1)
+        if model_name == "Ensemble":
+            probabilities = outputs[0]
+        else:
+            probabilities = torch.nn.functional.softmax(outputs, dim=1)
         predicted_class = torch.argmax(probabilities, dim=1).item()
         confidence = probabilities[0][predicted_class].item()
         all_probabilities = probabilities[0].numpy()

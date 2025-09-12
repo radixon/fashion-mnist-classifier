@@ -9,9 +9,7 @@ import mlflow.pytorch
 import numpy as np
 import warnings
 warnings.filterwarnings("ignore")
-
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 # Import modules from src directory
 from src.data.data_loader import load_datasets, get_dataloaders
 from src.data.preprocessing import get_transforms
@@ -78,8 +76,13 @@ def main():
                                                 num_workers=training_config['num_workers'], pin_memory=training_config['pin_memory'])
 
         # Model Initialization
-        logger.info("\nInitializing model...")
+        logger.info("\nInitializing model")
         model_name = model_config['name']
+
+        if model_name == "Ensemble":
+            logger.error("Cannot train 'Ensemble' model directly.  Train individual models.")
+            logger.info("Available individual models: VanillaCNN, DeepCNN, FashionResNet")
+            sys.exit(1)
         
         # Create an instance of VanillaCNN
         try:

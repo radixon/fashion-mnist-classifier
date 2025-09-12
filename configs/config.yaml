@@ -12,7 +12,7 @@ training:
   optimizer: "Adam"
   loss_function: "CrossEntropyLoss"   # Loss function is dependent on the number/type of output classes
   device: "cuda"                      # "cuda" is the GPU detector
-  num_workers: 12                     # DataLoader Parameter: 0 == local testing, > 0 for faster loading
+  num_workers: 0                      # DataLoader Parameter: 0 == local testing, > 0 for faster loading
   pin_memory: True                    # Speeds up data transfer to GPU
   # Callbacks Configuration
   callbacks:
@@ -42,7 +42,7 @@ model:
     conv3_out_channels: 256
     linear1_features: 512
     dropout_rate: 0.3
-  # ResNetCNN
+  # FashionResNet
   fashion_resnet_params:
     block_type: "BasicBlock"
     num_blocks: [2, 2, 2]

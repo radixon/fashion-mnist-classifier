@@ -1,11 +1,11 @@
-# import os
-# import sys
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import torch
 import torch.nn as nn
 import logging
 from typing import List, Dict, Any
 from src.models.model_factory import ModelFactory
-# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 logger = logging.getLogger(__name__)
 
@@ -69,15 +69,18 @@ class VotingEnsemble(nn.Module):
         for model_name in model_names:
             try:
                 # Create model using factory
-                model_instance = ModelFactory.create_model(model_name, data_config, model_config)
+                model = ModelFactory.create_model_from_config(model_name, data_config, model_config)
 
                 # Load weights
-                model_path = f"{model_weights_dir}/best_model_{model_name}.pth"
-                model_instance.load_state_dict(torch.load(model_path, map_location=device))
-                model_instance.to(device)
-                model_instance.eval()
+                model_path = os.path.join(model_weights_dir, f"best_model_{model_name}.pth")
+                if not os.path.exists(model_path):
+                    raise FileNotFoundError(f"Model weights not found at {model_path}")
 
-                models.append(model_instance)
+                model.load_state_dict(torch.load(model_path, map_location=device))
+                model.to(device)
+                model.eval()
+
+                models.append(model)
                 logger.info(f"Successfully loaded {model_name} for ensemble")
 
             except Exception as e:
