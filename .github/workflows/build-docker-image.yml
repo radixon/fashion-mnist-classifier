@@ -16,18 +16,17 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Build Docker image
         run:  |
-          docker buildx build \
-            --platform linux/amd64 \
-            -t fashion-mnist-classifier-cpu:latest \
-            -f docker/Dockerfile \
-            --load \
-            .
+          docker build -t fashion-mnist-classifier-cpu:latest -f docker/Dockerfile.cpu .
 
-      - name: Test the image by rnning a script
+      - name: Run training inside Docker
+        run:  |
+          docker run --rm fashion-mnist-classifier-cpu:latest python3 scripts/train.py
+
+      - name: Test the image by running a script
         # Verify image build 
         run:  |
-          docker run --rm fashion-mnist-classifer-cpu:latest python3 scripts/train.py --epochs 2
+          docker run --rm fashion-mnist-classifier-cpu:latest python3 scripts/train.py --epochs 2
