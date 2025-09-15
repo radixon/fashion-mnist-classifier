@@ -144,7 +144,7 @@ jobs:
       - name: Upload security reports
         uses: actions/upload-artifact@v4
         with:
-          name: security-reports
+          name: security-reports-${{ matrix.python-version }}
           path: |
             bandit-report.json
         if: always()
