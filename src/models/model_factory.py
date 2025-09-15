@@ -14,16 +14,14 @@ class ModelFactory:
     Factory class for creating model instances based on configuration
     """
     # Available Models
-    _MODELS = {
-        "VanillaCNN": VanillaCNN,
-        "DeepCNN": DeepCNN,
-        "FashionResNet": FashionResNet
+    _MODELS = {"VanillaCNN": VanillaCNN,
+               "DeepCNN": DeepCNN,
+               "FashionResNet": FashionResNet
     }
 
-    _MODEL_PARAM_KEYS = {
-                "VanillaCNN": [],
-                "DeepCNN": ["deep_cnn_params"],
-                "FashionResNet": ["fashion_resnet_params"]
+    _MODEL_PARAM_KEYS = {"VanillaCNN": [],
+                         "DeepCNN": ["deep_cnn_params"],
+                         "FashionResNet": ["fashion_resnet_params"]
     }
 
     @classmethod
@@ -105,8 +103,8 @@ class ModelFactory:
         return model_name in cls._MODELS
 
     def create_model_from_config(model_name: str,
-                    data_config: Dict[str, Any],
-                    model_config: Dict[str, Any]) -> Any:
+                                 data_config: Dict[str, Any],
+                                 model_config: Dict[str, Any]) -> Any:
         """
         Convenience function to create a model instance.
 
