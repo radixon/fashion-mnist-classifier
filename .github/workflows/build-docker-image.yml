@@ -2,10 +2,14 @@ name: Build Docker Image
 
 on:
   push:
-    braches:  [ main ]
+    branches:  [ main ]
   pull_request:
-    braches:  [ main ]
+    branches:  [ main ]
   workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   build:
@@ -18,15 +22,51 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Cache Docker image
+        uses: actions/cache@v4
+        with:
+          path: /temp/.buildx-cache
+          key:  ${{ runner.os }}-docker-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
+
       - name: Build Docker image
         run:  |
-          docker build -t fashion-mnist-classifier-cpu:latest -f docker/Dockerfile.cpu .
-
-      - name: Run training inside Docker
-        run:  |
-          docker run --rm fashion-mnist-classifier-cpu:latest python3 scripts/train.py
+          docker build \
+          --cache-from=type=local,src=/temp/.buildx-cache \
+          --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max\
+          -t fashion-mnist-classifier-cpu:latest \
+          -f docker/Dockerfile.cpu .
 
       - name: Test the image by running a script
         # Verify image build 
         run:  |
           docker run --rm fashion-mnist-classifier-cpu:latest python3 scripts/train.py --epochs 2
+      
+      - name: Move new cache
+        if: always()
+        run:  |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      
+docker-publish:
+  if: github.ref == 'refs/heads/main'
+  needs:  docker-build
+  runs-on:  ubuntu-latest
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Push Docker image
+      run:  |
+        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/fashion-mnist-classifier-cpu
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+        docker tage fashion-mnist-classifier-cpu:latest $IMAGE_ID:latest
+        docker push $IMAGE_ID:latest

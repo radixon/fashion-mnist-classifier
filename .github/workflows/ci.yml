@@ -26,7 +26,7 @@ jobs:
       - name: Build Docker image
         run:  |
           docker build -t fashion-mnist-classifier-cpu:latest -f docker/Dockerfile.cpu .
-          
+
   build-and-test:
     runs-on: ubuntu-latest
     strategy:
@@ -150,8 +150,8 @@ jobs:
         
       - name: Run bandit security scan
         run: |
-          bandit -r src/ -f json -o bandit-report.json || true
-          bandit -r src/ -ll  # Show results
+          bandit -r src/ -f json -o bandit-report-${{ matrix.python.version }}.json || true
+          bandit -r src/ -ll
         continue-on-error: true
         
       - name: Upload security reports
@@ -159,5 +159,5 @@ jobs:
         with:
           name: security-reports-${{ matrix.python-version }}
           path: |
-            bandit-report.json
+            bandit-report-*.json
         if: always()
