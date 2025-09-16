@@ -35,8 +35,7 @@ jobs:
           docker build \
           --cache-from=type=local,src=/temp/.buildx-cache \
           --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max\
-          -t fashion-mnist-classifier-cpu:latest \
-          -f docker/Dockerfile.cpu .
+          -t fashion-mnist-classifier-cpu:latest .
 
       - name: Test the image by running a script
         # Verify image build 
