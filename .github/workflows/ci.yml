@@ -25,7 +25,7 @@ jobs:
 
       - name: Build Docker image
         run:  |
-          docker build -t fashion-mnist-classifier-cpu:latest .
+          docker build -t fashion-mnist-classifier-cpu:latest -f docker/Dockerfile .
 
   build-and-test:
     runs-on: ubuntu-latest
