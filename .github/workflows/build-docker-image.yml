@@ -34,14 +34,20 @@ jobs:
         run:  |
           docker buildx build \
           --cache-from=type=local,src=/temp/.buildx-cache \
-          --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max\
+          --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max \
+          --load \
           -t fashion-mnist-classifier-cpu:latest \
           -f docker/Dockerfile .
 
-      - name: Test the image by running a script
-        # Verify image build 
+      - name: Move cache
         run:  |
-          docker run --rm fashion-mnist-classifier-cpu:latest python3 scripts/train.py --epochs 2
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - name: Test the image by running a script
+        run:  |
+          docker run --rm fashion-mnist-classifier-cpu:latest python3 --version
+          docker run --rm fashion-mnist-classifier-cpu:latest python3 -c "import torch; print('PyTorch version:', torch.__version__)"
       
   docker-publish:
     if: github.ref == 'refs/heads/main'
@@ -58,9 +64,24 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push Docker image
-        run:  |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/fashion-mnist-classifier-cpu
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          docker tage fashion-mnist-classifier-cpu:latest $IMAGE_ID:latest
-          docker push $IMAGE_ID:latest
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/fashion-mnist-classifier-cpu
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
+            
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context:  .
+          file: docker/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
