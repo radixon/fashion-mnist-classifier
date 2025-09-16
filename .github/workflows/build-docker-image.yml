@@ -32,7 +32,7 @@ jobs:
 
       - name: Build Docker image
         run:  |
-          docker build \
+          docker buildx build \
           --cache-from=type=local,src=/temp/.buildx-cache \
           --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max\
           -t fashion-mnist-classifier-cpu:latest \
