@@ -1,11 +1,17 @@
 # Fashion MNIST Classifier: End-to-End Deep Learning Pipeline with MLOps
 
 [![CI Status](https://github.com/radixon/fashion-mnist-classifier/actions/workflows/ci.yml/badge.svg)](https://github.com/radixon/fashion-mnist-classifier/actions/workflows/ci.yml)
+[![Docker Build](https://github.com/radixon/fashion-mnist-classifier/actions/workflows/docker.yml/badge.svg)](https://github.com/radixon/fashion-mnist-classifier/actions)
+[![Deploy Docs](https://github.com/radixon/fashion-mnist-classifier/actions/workflows/deploy_docs.yml/badge.svg)](https://github.com/radixon/fashion-mnist-classifier/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-orange.svg)](https://pytorch.org/)
+
+A comprehensive MLOps project implementing a Fashion MNIST classifier using PyTorch, featuring ensemble modeling, Docker deployment, REST API, and complete CI/CD pipeline.
 
 ## Project Description
 
-This project delivers a **comprehensive, end-to-end deep learning solution** for classifying images from the Fashion MNIST dataset. Designed with **PyTorch**, the project showcases a full machine learning lifecycle, from structured data management and model experimentation to evaluation and **integrated experiment tracking with MLflow**. The project emphasizes **MLOps** principles and best practices in software engineering.
+This project demonstrates end-to-end machine learning engineering skills through a complete Fashion MNIST classification pipeline. Development showcases modern MLOps practices, clean code architecture, and production-ready deployment strategies.
+
 
 ## Table of Contents
 
@@ -16,9 +22,10 @@ This project delivers a **comprehensive, end-to-end deep learning solution** for
 5.  [Technologies](#technologies)
 6.  [Installation](#installation)
 7.  [Usage](#usage)
-8.  [Project Structure](#project-structure)
-9.  [MLOps & Experiment Tracking](#mlops--experiment-tracking)
-10. [License](#license)
+8.  [API Reference](#api-reference)
+9.  [Project Structure](#project-structure)
+10.  [MLOps & Experiment Tracking](#mlops--experiment-tracking)
+11. [License](#license)
 
 ## Features
 
@@ -73,10 +80,14 @@ The project uses the Fashion MNIST dataset.  The dataset consists of 70,000 gray
 
 ## Technologies
 
-* Language: Python
-* Deep Learning: PyTorch, torchvision
-* Data & ML Libraries: NumPy, pandas, matplotlib, seaborn, tqdm, scikit-learn
-* MLOps & Tools: MLflow, YAML, Git, logging
+* Framework: PyTorch 2.0+
+* Experiment Tracking: MLflow
+* Web Framework: Streamlit, Flask
+* Containerization: Docker, Docker Compose
+* CI/CD: GitHub Actions
+* Testing: PyTest
+* Configuration: YAML configuration management
+* Documentation: MkDocs
 
 ## Installation
 
@@ -100,60 +111,75 @@ pip install -r requirements.txt
 ```
 
 ## Usage
-Explore the dataset, train, and evaluate the model using the configured scripts and notebooks:
 
-- Train Model
+### Train Models
+
+- Train VanillaCNN (set model.name to 'VanillaCNN' in config.yaml)
 ```bash
 python3 scripts/train.py
 ```
 
-- Evaluate Model
+- Train DeepCNN (set model.name to 'DeepCNN' in config.yaml)
+```bash
+python3 scripts/train.py
+```
+
+- Train FashionResNet (set model.name to 'FashionResNet in config.yaml)
+```bash
+python3 scripts/train.py
+```
+
+### Evaluate Trained Models
+
+- Evaluate VanillaCNN (set model.name to 'VanillaCNN' in config.yaml)
 ```bash
 python3 scripts/evaluate.py
 ```
 
-## Jupyter Lab
-- JupyterLab
+- Evaluate DeepCNN (set model.name to 'DeepCNN' in config.yaml)
 ```bash
-jupyter lab
+python3 scripts/evaluate.py
 ```
-- 'notebooks/01_data_exploration.ipynb': Exploratory Data Analysis Notebook
-- 'notebooks/02_baseline_models.ipynb': Baseline Model Experimentation Notebook
 
-## MLflow UI
+- Evaluate FashionResNet (set model.name to 'FashionResNet' in config.yaml)
 ```bash
-mlflow ui
-```
-- Navigate to the address displayed in terminal (http://<localhost>:5000)
-
-## Docker Deployment
-
-#### Build and Run
-
-```
-# Build Docker image
-./docker/build.sh
-
-# Run training in container
-./docker/run_training.sh
-
-# Run evaluation in container
-./docker/run_evaluation.sh
+python3 scripts/evaluate.py
 ```
 
-### Docker Compose
-
-```
-cd docker/
-docker-compose up --build
+- Evaluate Ensemble (set model.name to 'Evaluate' in config.yaml)
+```bash
+python3 scripts/evaluate.py
 ```
 
-### Development and Testing
+### Web Application
 
+- Run streamlit web app
+***Access*** http://localhost:8501
 ```
-# Run all tests
-python3 -m pytest tests/
+streamlit run app/streamlit_app.py
 ```
+
+### REST API
+
+***API endpoints*** http://localhost:5000
+```
+python3 app/flask_app.py
+```
+
+### Docker Deployment
+
+- Deploy Both Applications
+```
+docker compose -f docker/docker-compose.yml up -d
+```
+
+## API Reference
+
+***Flask API Endpoints***
+*   'GET /health' - Health Check
+*   'POST /predict' - Image Classification
+*   'GET /model-info'   - Model Information
+*   'GET /' - API Documentation
 
 ## Project Structure
 ```
@@ -224,3 +250,4 @@ fashion-mnist-classifier/
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
+
