@@ -1,7 +1,7 @@
 # Fashion MNIST Classifier: End-to-End Deep Learning Pipeline with MLOps
 
 [![CI Status](https://github.com/radixon/fashion-mnist-classifier/actions/workflows/ci.yml/badge.svg)](https://github.com/radixon/fashion-mnist-classifier/actions/workflows/ci.yml)
-[![Docker Build](https://github.com/radixon/fashion-mnist-classifier/actions/workflows/docker.yml/badge.svg)](https://github.com/radixon/fashion-mnist-classifier/actions)
+[![Build Docker Image](https://github.com/radixon/fashion-mnist-classifier/actions/workflows/build-docker-image.yml/badge.svg)](https://github.com/radixon/fashion-mnist-classifier/actions)
 [![Deploy Docs](https://github.com/radixon/fashion-mnist-classifier/actions/workflows/deploy_docs.yml/badge.svg)](https://github.com/radixon/fashion-mnist-classifier/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-orange.svg)](https://pytorch.org/)
